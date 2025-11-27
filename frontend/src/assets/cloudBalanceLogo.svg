@@ -1,0 +1,33 @@
+<svg width="600" height="150" viewBox="0 0 600 150" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g id="CloudBalance_Logo">
+    <defs>
+      <linearGradient id="cloudColor" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#3498DB"/>
+        <stop offset="100%" stop-color="#3498DB"/>
+      </linearGradient>
+      <linearGradient id="oColor" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#E91E63"/>
+        <stop offset="100%" stop-color="#E91E63"/>
+      </linearGradient>
+      <linearGradient id="balanceColor" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#193B6D"/>
+        <stop offset="100%" stop-color="#193B6D"/>
+      </linearGradient>
+    </defs>
+
+    <path fill="none" stroke="#3498DB" stroke-width="8" 
+          d="M75 40C50 40 30 60 30 85C30 110 50 130 75 130H300C325 130 345 110 345 85C345 60 325 40 300 40H250C250 20 230 0 205 0C180 0 160 20 160 40H75Z" 
+          stroke-linecap="round" stroke-linejoin="round"/>
+
+    <text x="35" y="115" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#3498DB">C</text>
+
+    <text x="125" y="115" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#3498DB">l</text>
+
+    <text x="160" y="115" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#E91E63">O</text>
+
+    <text x="220" y="115" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#3498DB">ud</text>
+
+    <text x="350" y="115" font-family="Arial, sans-serif" font-size="80" font-weight="bold" fill="#193B6D">Balance</text>
+
+  </g>
+</svg>
