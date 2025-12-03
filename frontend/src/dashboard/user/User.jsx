@@ -7,11 +7,11 @@ const User = () => {
   return (
     <>
       <div> 
-        <div className="h-[88vh] bg-black/10 p-5 flex flex-col gap-5">
+        <div className="h-[88vh] bg-black/10 p-5 flex flex-col gap-5 cursor-default">
         <div>
           <BreadCrumbs folder={["User"]}/>
           <div className="flex justify-between">
-            <h1 className="font-bold text-4xl">Users</h1>
+            <h1 className="font-bold text-4xl ">Users</h1>
             <div>
               {/* right space for section like 2 factor authentication which is hsown in main site */}
             </div>

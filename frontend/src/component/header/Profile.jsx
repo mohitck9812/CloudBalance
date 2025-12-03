@@ -20,12 +20,12 @@ const Profile = () => {
     });
 
     localStorage.clear();
-    navigate("/login", { replace: true });
+    navigate("/", { replace: true });
   };
 
   return (
     <div className="flex h-full justify-center items-center gap-2">
-      {console.log(user)}
+      {/* {console.log(user)} */}
       {/* profile */}
       <div className="flex ">
         <div className="w-10">

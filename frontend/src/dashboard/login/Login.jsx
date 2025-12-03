@@ -22,11 +22,18 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault(); 
     
-    if (!formData.email || !formData.password) return;
+    if (!formData.email || !formData.password){
+      if(!formData.email) setEmailError("This field is required");
+      if(!formData.password) setPasswordError("This field is required");
+      return;
+    }
 
     if(formSubmission(formData,userData, setUser)) {
       // console.log("move to dashboard");
       navigate("/dashboard");
+    }else{
+      setEmailError("Check Email id");
+      setPasswordError("Check Password and try again")
     }
   };
 

@@ -10,7 +10,7 @@ export default function Footer() {
           </div>
 
           <div className="text-sm text-gray-700 cursor-pointer hover:underline">
-            <Link to="mailto:mohit@cloudkeeper.com">Contact Us</Link>
+            <Link to="mailto:mohit@cloudkeeper.com" className="text-blue-500">Contact Us</Link>
           </div>
         </div>
       </div>

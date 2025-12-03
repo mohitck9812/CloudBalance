@@ -4,7 +4,6 @@ import { authData } from "./AuthContext";
 
 const AuthData = ({ children }) => {
   const [module, setModule] = useState("Lens");
-  // const 
 
   const state = {
     firstName: "",

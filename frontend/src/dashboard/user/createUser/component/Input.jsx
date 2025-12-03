@@ -2,11 +2,11 @@ import clsx from "clsx";
 import React from "react";
 
 export default function Input({
-  label,
-  type,
-  name,
-  placeholder,
-  value,
+  label = "",
+  type = "",
+  name = "",
+  placeholder = "",
+  value = "",
   onChange,
   onBlur,
   error,

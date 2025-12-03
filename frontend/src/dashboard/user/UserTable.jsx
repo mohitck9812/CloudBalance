@@ -1,13 +1,19 @@
 import clsx from "clsx";
 import Roles from "./component/Roles";
 import editIcon from "./component/EditIcon.svg";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Trash from "../../assets/trash.svg"
 import { useContext } from "react";
 import { dummyData } from "../../context/AuthContext";
 
 const UserTable = () => {
+  const navigate = useNavigate();
   const {userData:data, setUserData:setData} = useContext(dummyData)
+
+  function handleEdit(value){
+    // console.log(value);
+    navigate(`/dashboard/user/edit/${value.id}`);
+  }
 
   return (
     <div className="w-full max-h-[67vh] overflow-x-auto p-2">
@@ -61,7 +67,9 @@ const UserTable = () => {
                 <td className={clsx("p-2")}>{value.loginTime} </td>
                 <td className={clsx("p-2")}>
                   <div className="flex gap-3">
-                  <button className="hover:cursor-pointer">
+
+                  <button className="hover:cursor-pointer"
+                  onClick={() => {handleEdit(value)}}>
                     {" "}
                     <img src={editIcon} />{" "}
                   </button>{" "}

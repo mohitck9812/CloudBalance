@@ -6,7 +6,9 @@ const ProtectedRoute = ({ children }) => {
   const { user } = useContext(authData);
 
 
-  if (!user || user.firstName === "") return <Navigate to="/login" replace />;
+  if (!user || user.firstName === "") return <Navigate to="/" replace />;
+
+  // console.log(user)
 
 
   return children;

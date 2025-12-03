@@ -8,13 +8,16 @@ import CreateUser from "../dashboard/user/createUser/CreateUser";
 import ProtectedRoute from "../component/Login/ProtectedRoute";
 import NotFound from "../dashboard/NotFound"
 import Home from "../dashboard/Home";
+import IsAuthenticated from "./IsAuthenticated";
+import EditUser from "../dashboard/user/editUser/EditUser";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-      { path: "login", element: <Login />, replace: true },
+      { element: <IsAuthenticated> <Login /></IsAuthenticated>, replace: true,index: true },
+      // {element: <Login />, replace: true, index: true},
       {
         path: "dashboard",
         element: <ProtectedRoute><Dashboard /></ProtectedRoute>,
@@ -26,20 +29,27 @@ const router = createBrowserRouter([
           {
             path: "user",
             element: <User />,
+            children:[
+              
+            ]
           },
           { 
             path: "user/create", 
             element: <CreateUser /> 
           },
+          {
+            path: "user/edit/:userID",
+            element:<EditUser />
+          }
         ],
-      },
-      {
+      },  
+    ],
+    
+  },
+  {
         path: "*",
         element: <NotFound />
       }
-      
-    ],
-  },
 ]);
 
 export default function Route() {

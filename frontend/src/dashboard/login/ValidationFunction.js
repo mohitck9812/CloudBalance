@@ -7,13 +7,18 @@ export function formSubmission(formData, userData, setUser) {
   );
 
   const user = checkValidUser(formData.email, userData);
-  console.log(user[0])
-  localStorage.setItem("authUser", JSON.stringify(user[0]));
+  // console.log(user[0])
 
-  if (!user || user.firstName !== "") {
+
+  if (user[0]?.firstName) {
+    console.log("Inside set user condition")
     setUser(...user);
+    localStorage.setItem("authUser", JSON.stringify(user[0]));
     return true;
   }
+
+  // alert("Email id does not match");
+  return false;
   // console.log(...user)
 }
 
