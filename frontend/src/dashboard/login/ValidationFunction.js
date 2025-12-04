@@ -7,25 +7,22 @@ export function formSubmission(formData, userData, setUser) {
   );
 
   const user = checkValidUser(formData.email, userData);
-  // console.log(user[0])
-
 
   if (user[0]?.firstName) {
-    console.log("Inside set user condition")
     setUser(...user);
     localStorage.setItem("authUser", JSON.stringify(user[0]));
     return true;
   }
 
-  // alert("Email id does not match");
   return false;
-  // console.log(...user)
 }
 
+//check valid user
 const checkValidUser = (loginEmail, userData) => {
   return userData.filter((value) => value.email === loginEmail);
 };
 
+// Email change 
 export function handleChangeEmail(e, setEmailError, formData, setFormData) {
   const { name, value } = e.target;
 
@@ -40,6 +37,8 @@ export function handleChangeEmail(e, setEmailError, formData, setFormData) {
   setEmailError(!updatedData.email ? "This field is required" : null);
 }
 
+
+// Form Email change ( used in login page )
 export function handleChangeFormEmail(e, setEmailError, formData, setFormData) {
   const { name, value } = e.target;
 
@@ -62,6 +61,8 @@ export function handleChangeFormEmail(e, setEmailError, formData, setFormData) {
   }));
 }
 
+
+// trigger when password changes (used in login form)
 export function handleChangePassword(
   e,
   setPasswordError,
@@ -75,6 +76,8 @@ export function handleChangePassword(
   setPasswordError(!data.password ? "This field is required" : null);
 }
 
+
+// first name change (used in edit and create user)
 export function handleChangeFirstName(e, setUserName, username, setNameError) {
   const { name, value } = e.target;
 
@@ -96,6 +99,8 @@ export function handleChangeFirstName(e, setUserName, username, setNameError) {
   }
 }
 
+
+// last name change ( used in edit and create user)
 export function handleChangeLastName(e, setUserName, username, setNameError) {
   const { name, value } = e.target;
   setUserName({
