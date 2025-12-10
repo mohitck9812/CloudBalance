@@ -4,6 +4,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import BreadCrumbs from "../../component/BreadCrumbs";
 
 const User = () => {
+  
   return (
     <>
       <div> 
@@ -20,7 +21,7 @@ const User = () => {
 
           <div className="bg-white py-4 px-2 flex flex-col gap-3">
             <div className="flex gap-4 px-3">
-              <NavLink to="/dashboard/user/create">
+              <NavLink to="/dashboard/user/create" >
                 <button className="bg-blue-700 p-1.5 text-sm text-white rounded hover:cursor-pointer">
                   {" "}
                   + Add New User{" "}

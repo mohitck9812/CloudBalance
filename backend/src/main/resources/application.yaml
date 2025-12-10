@@ -19,3 +19,11 @@ logging:
     org.springframework: INFO
     org.hibernate.SQL: DEBUG
 
+# change swagger-ui path (optional)
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+  # change base api docs path (optional)
+  api-docs:
+    path: /v3/api-docs

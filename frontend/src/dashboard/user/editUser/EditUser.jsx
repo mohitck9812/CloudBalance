@@ -6,7 +6,7 @@ import {
   handleChangeFormEmail,
   handleChangeLastName,
 } from "../../login/ValidationFunction";
-import Input, { InputSelect } from "../createUser/component/Input";
+import Input, { InputRadio, InputSelect } from "../createUser/component/Input";
 
 const EditUser = () => {
   const { userData: data, setUserData: setData } = useContext(dummyData);
@@ -18,8 +18,9 @@ const EditUser = () => {
 
   useEffect(() => {
   const foundUser = data.find((value) => value.id == userID);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   setUserDetail(foundUser || {});  
-}, [userID, data]);
+  }, [userID, data]);
 
 
   const handleEditSubmit = (e, userDetail, data, setData) => {
@@ -121,6 +122,18 @@ const EditUser = () => {
                     id={"role"}
                     values={["No Access", "Read", "Admin"]}
                   />
+
+                </div>
+
+                <div className="flex gap-10">
+                  {/* to add radio button of active  */}
+                  <InputRadio 
+                  label={"Active Status"}
+                  id={"Active Status"}
+                  values={["Active", "Disabled"]}
+                  checked={1}
+                  />
+    
                 </div>
                 <button
                 className="self-start my-2 rounded bg-primary p-2 transition-all duration-150 ease-in hover:cursor-pointer hover:bg-blue-600"

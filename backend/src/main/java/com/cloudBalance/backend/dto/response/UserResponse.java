@@ -3,19 +3,16 @@ package com.cloudBalance.backend.dto.response;
 import lombok.*;
 
 import java.util.Date;
-import java.util.List;
 
 @Builder
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
+@Data
 public class UserResponse {
 
+    private Long id;
     private String firstName;
     private String lastName;
     private String email;
-    private List<String> role;
+    private RoleResponse role;
     private boolean isActive;
     private Date lastLogin;
 

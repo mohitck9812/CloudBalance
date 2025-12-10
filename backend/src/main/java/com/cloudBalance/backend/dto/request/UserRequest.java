@@ -1,20 +1,15 @@
 package com.cloudBalance.backend.dto.request;
 
-import com.cloudBalance.backend.entity.User;
 import lombok.*;
 
-import java.util.List;
-
-@Builder
-@Getter
-@Setter
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserRequest {
-
+    private Long roleId;
     private String firstName;
     private String lastName;
     private String email;
-    private List<String> roles;
-    private Boolean isActive;
+    private Boolean active;
 }

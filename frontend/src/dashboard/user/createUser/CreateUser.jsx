@@ -1,4 +1,5 @@
-import React, { useContext, useState } from "react";
+// src/.../CreateUser.jsx
+import React, { useState } from "react";
 import Input, { InputSelect } from "./component/Input";
 import {
   handleChangeFormEmail,
@@ -6,18 +7,19 @@ import {
   handleChangeLastName,
 } from "../../login/ValidationFunction";
 import { handleCreateUserSubmit } from "./component/CreateUserHandle";
-import { dummyData } from "../../../context/AuthContext";
 import { useNavigate } from "react-router";
+import useCreateUser from "../../../api/user/UseCreateUser";
+import Loading from "../../../component/loading/Loading";
 
 const CreateUser = () => {
-  const { userData, setUserData } = useContext(dummyData);
   const navigate = useNavigate();
+  const { loading, error, createUser } = useCreateUser(); // keep name createUser
 
   const [userDetail, setUserDetail] = useState({
     firstName: "",
     lastName: "",
-    email:"",
-    role:"No Access"
+    email: "",
+    role: "No Access",
   });
 
   const [emptyNameError, setEmptyNameError] = useState({
@@ -26,6 +28,16 @@ const CreateUser = () => {
     emailError: "",
     role: "",
   });
+
+  if (loading) return <Loading />;
+
+  if (error) {
+    return (
+      <div className="bg-black/10 flex flex-col gap-5 h-[calc(100vh-132px)]">
+        <div className="w-full p-5 border-b border-black/15">Retry In A While....</div>
+      </div>
+    );
+  }
 
   return (
     <div className="bg-black/10 flex flex-col gap-5 h-[calc(100vh-132px)]">
@@ -37,9 +49,7 @@ const CreateUser = () => {
         <div className="rounded shadow-xl bg-white p-2">
           <form
             className="p-3"
-            onSubmit={(e) =>
-              handleCreateUserSubmit(e, userData, setUserData, navigate)
-            }
+            onSubmit={(e) => handleCreateUserSubmit(e, createUser, navigate)}
           >
             <div className="flex flex-col gap-5">
               <div className="flex gap-10">
@@ -50,12 +60,7 @@ const CreateUser = () => {
                   placeholder="Enter First Name"
                   value={userDetail.firstName}
                   onChange={(e) =>
-                    handleChangeFirstName(
-                      e,
-                      setUserDetail,
-                      userDetail,
-                      setEmptyNameError
-                    )
+                    handleChangeFirstName(e, setUserDetail, userDetail, setEmptyNameError)
                   }
                   error={emptyNameError.firstNameError}
                 />
@@ -66,16 +71,12 @@ const CreateUser = () => {
                   placeholder="Enter Last Name"
                   value={userDetail.lastName}
                   onChange={(e) =>
-                    handleChangeLastName(
-                      e,
-                      setUserDetail,
-                      userDetail,
-                      setEmptyNameError
-                    )
+                    handleChangeLastName(e, setUserDetail, userDetail, setEmptyNameError)
                   }
                   error={emptyNameError.lastNameError}
                 />
               </div>
+
               <div className="flex gap-10">
                 <Input
                   label="Email *"
@@ -84,12 +85,7 @@ const CreateUser = () => {
                   placeholder="Enter Email ID"
                   value={userDetail.email}
                   onChange={(e) =>
-                    handleChangeFormEmail(
-                      e,
-                      setEmptyNameError,
-                      userDetail,
-                      setUserDetail
-                    )
+                    handleChangeFormEmail(e, setEmptyNameError, userDetail, setUserDetail)
                   }
                   error={emptyNameError.email}
                 />
@@ -98,7 +94,10 @@ const CreateUser = () => {
                   label={"Select Roles"}
                   name={"role"}
                   id={"role"}
-                  values={["No Access", "Read", "Admin"]}
+                  values={["Admin", "Customer", "Read_Only"]}
+                  // optional: make it controlled:
+                  value={userDetail.role}
+                  onChange={(e) => setUserDetail((p) => ({ ...p, role: e.target.value }))}
                 />
               </div>
 

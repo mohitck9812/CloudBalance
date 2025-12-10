@@ -3,16 +3,55 @@ import Roles from "./component/Roles";
 import editIcon from "./component/EditIcon.svg";
 import { NavLink, useNavigate } from "react-router-dom";
 import Trash from "../../assets/trash.svg"
-import { useContext } from "react";
-import { dummyData } from "../../context/AuthContext";
+// import { useContext, useEffect } from "react";
+// import { dummyData } from "../../context/AuthContext";
+import useFetchAllUser from "../../api/user/useFetchAllUser";
+import { useEffect, useState } from "react";
+import Loading from "../../component/loading/Loading";
 
 const UserTable = () => {
   const navigate = useNavigate();
-  const {userData:data, setUserData:setData} = useContext(dummyData)
+  // const {userData:data, setUserData:setData} = useContext(dummyData)
+  const {data:dataList, loading, error, fetchAllUser} = useFetchAllUser();
+  const [data, setData] = useState([]);
+
+  useEffect(()=>{
+    fetchAllUser();
+  },[])
+
+  useEffect(() =>{
+    setData(dataList);
+  },[dataList]);
 
   function handleEdit(value){
     // console.log(value);
     navigate(`/dashboard/user/edit/${value.id}`);
+  }
+
+  function handleDeleteButton(user){
+
+    setData(prev => prev.filter(v => v.id !== user.id));
+  }
+
+  if(loading){
+    return(
+      <>
+        {/* <div className="w-full max-h-[67vh]">
+          <p className="text-7xl">Loading...</p>
+        </div> */}
+        <Loading/>
+      </>
+    )
+  }
+
+  if(error){
+    return(
+      <>
+        <div className="w-full max-h-[67vh]">
+          <p className="text-7xl">Retry in a while</p>
+        </div>
+      </>
+    )
   }
 
   return (
@@ -47,7 +86,7 @@ const UserTable = () => {
           {data.map((value, index) => {
             return (
               <tr
-                key={index}
+                key={value.id}
                 className={clsx({
                   "bg-gray-100": index % 2 === 0,
                   "bg-gray-50": index % 2 !== 0,
@@ -59,12 +98,10 @@ const UserTable = () => {
                 <td className={clsx("p-2")}>
                   {" "}
                   <div className="flex justify-start gap-4">
-                    {value.role.map((role, i) => (
-                      <Roles key={i} roles={role} />
-                    ))}
+                    <Roles roles={value?.role?.roleName} />
                   </div>
                 </td>
-                <td className={clsx("p-2")}>{value.loginTime} </td>
+                <td className={clsx("p-2")}>{!value.loginTime ? "--" :  value.loginTime} </td>
                 <td className={clsx("p-2")}>
                   <div className="flex gap-3">
 
@@ -73,13 +110,10 @@ const UserTable = () => {
                     {" "}
                     <img src={editIcon} />{" "}
                   </button>{" "}
+                  {/* Delete button */}
                   <button className="hover:cursor-pointer" 
                   onClick={() => {
-                    setData((prev)=>
-                      
-                      prev.filter((val, i) => val === value ? console.log(val ,i) : true)
-                    )
-                    // console.log(value.firstName)
+                    handleDeleteButton(value); 
                   }}>
                     <img src={Trash} />{" "}
                   </button>

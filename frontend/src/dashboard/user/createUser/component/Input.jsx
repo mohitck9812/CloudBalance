@@ -39,13 +39,36 @@ export function InputSelect({ label, name, id, values }) {
       <div className="flex flex-col gap-3.5">
         <label htmlFor={id}>{label}</label>
 
-        <select className=" mt-1 w-100 border rounded pl-4 py-3 border-black/10 placeholder:text-black/30 focus:outline-primary/70" name={name} id={id}>
+        <select
+          className=" mt-1 w-100 border rounded pl-4 py-3 border-black/10 placeholder:text-black/30 focus:outline-primary/70"
+          name={name}
+          id={id}
+        >
           {values.map((item, index) => (
             <option value={item} key={index}>
               {item}
             </option>
           ))}
         </select>
+      </div>
+    </>
+  );
+}
+
+//to edit things in this    
+export function InputRadio({ label, id, values, checked }) {
+  return (
+    <>
+      <div className="flex flex-col gap-3.5">
+        <label htmlFor={id}>{label}</label>
+
+      <div className="border rounded p-3 border-black/10">
+        {values.map((item, index) => (
+          <label>
+          <input className="mx-4" type="radio" value={item} key={index} checked={()=> index == checked? true : false}/>
+          {item}</label>
+        ))}
+        </div>
       </div>
     </>
   );
