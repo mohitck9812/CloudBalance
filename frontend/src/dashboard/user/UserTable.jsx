@@ -8,29 +8,34 @@ import Trash from "../../assets/trash.svg"
 import useFetchAllUser from "../../api/user/useFetchAllUser";
 import { useEffect, useState } from "react";
 import Loading from "../../component/loading/Loading";
+import { handleDeleteUser } from "./deleteUser/DeleteUser";
+import useDelete from "../../api/user/useDelete";
 
 const UserTable = () => {
   const navigate = useNavigate();
   // const {userData:data, setUserData:setData} = useContext(dummyData)
   const {data:dataList, loading, error, fetchAllUser} = useFetchAllUser();
+  const {deleteUser} = useDelete();
   const [data, setData] = useState([]);
 
   useEffect(()=>{
     fetchAllUser();
   },[])
 
-  useEffect(() =>{
+  useEffect(() => {
+  if (Array.isArray(dataList)) {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setData(dataList);
-  },[dataList]);
+  } else {
+    setData([]); 
+  }
+  console.log(dataList)
+}, [dataList]);
+
 
   function handleEdit(value){
     // console.log(value);
     navigate(`/dashboard/user/edit/${value.id}`);
-  }
-
-  function handleDeleteButton(user){
-
-    setData(prev => prev.filter(v => v.id !== user.id));
   }
 
   if(loading){
@@ -83,7 +88,7 @@ const UserTable = () => {
             <td className="p-2">—</td>
           </tr>
 
-          {data.map((value, index) => {
+          {data?.map((value, index) => {
             return (
               <tr
                 key={value.id}
@@ -101,7 +106,7 @@ const UserTable = () => {
                     <Roles roles={value?.role?.roleName} />
                   </div>
                 </td>
-                <td className={clsx("p-2")}>{!value.loginTime ? "--" :  value.loginTime} </td>
+                <td className={clsx("p-2")}>{!value.lastLogin ? "--" : value.lastLogin} </td>
                 <td className={clsx("p-2")}>
                   <div className="flex gap-3">
 
@@ -113,7 +118,7 @@ const UserTable = () => {
                   {/* Delete button */}
                   <button className="hover:cursor-pointer" 
                   onClick={() => {
-                    handleDeleteButton(value); 
+                    handleDeleteUser(value, deleteUser, setData); 
                   }}>
                     <img src={Trash} />{" "}
                   </button>

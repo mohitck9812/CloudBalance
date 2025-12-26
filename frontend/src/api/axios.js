@@ -1,0 +1,39 @@
+import axios from "axios";
+import { getToken, removeToken } from "../util/Utils";
+
+const api = axios.create({
+  baseURL: "http://localhost:8080",
+  timeout: 10000,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+api.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+
+    if (token && !config.url.includes("/auth/login")) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (
+      error.response &&
+      (error.response.status === 401 || error.response.status === 403)
+    ) {
+      removeToken();
+      window.location.replace("/");
+    }
+    return Promise.reject(error);
+  }
+);
+
+export default api;

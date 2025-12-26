@@ -4,6 +4,8 @@ import com.cloudBalance.backend.enums.RoleType;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -19,5 +21,8 @@ public class Role {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
     private RoleType name;
+
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    private List<User> users;
 
 }

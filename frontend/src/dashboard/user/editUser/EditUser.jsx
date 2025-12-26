@@ -1,3 +1,5 @@
+//have to update password thing not working and active status
+
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { dummyData } from "../../../context/AuthContext";
@@ -116,12 +118,20 @@ const EditUser = () => {
                     error={emptyNameError.email}
                   />
 
-                  <InputSelect
+                  {/* <InputSelect
                     label={"Select Roles"}
                     name={"role"}
                     id={"role"}
-                    values={["No Access", "Read", "Admin"]}
-                  />
+                    values={[ "Admin","Read Only", "Customer"]}
+                  /> */}
+
+                    <Input
+                    label = "Password" 
+                    type = "password"
+                    name = "password"
+                    placeholder="Enter New Password"
+                    value ={userDetail.password}
+                    />
 
                 </div>
 

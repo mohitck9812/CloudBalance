@@ -8,6 +8,7 @@ import lombok.*;
 @Builder
 public class UserRequest {
     private Long roleId;
+    private String password;
     private String firstName;
     private String lastName;
     private String email;

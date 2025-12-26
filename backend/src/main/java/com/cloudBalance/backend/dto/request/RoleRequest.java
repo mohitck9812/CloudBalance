@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 @Builder
 public class RoleRequest {
-
     @NotNull
     private Long id;
+
 }

@@ -32,7 +32,7 @@ public class Transformer {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .role(roleResp)
-                .isActive(Boolean.TRUE.equals(user.getIsActive()))
+                .isActive(user.getIsActive())
                 .lastLogin(user.getLastLogin())
                 .build();
     }
@@ -42,10 +42,17 @@ public class Transformer {
     public static User userRequestToUser(UserRequest userRequest) {
         if (userRequest == null) return null;
 
+//        Role role = Role.builder()
+//                .id(userRequest.getRoleId())
+//                .name(new RoleType(userRequest.getRoleId()))
+//                .build();
+
         return User.builder()
                 .firstName(userRequest.getFirstName())
                 .lastName(userRequest.getLastName())
                 .email(userRequest.getEmail())
+                .password(userRequest.getPassword())
+//                .role()
                 .build();
     }
 
@@ -70,10 +77,8 @@ public class Transformer {
     public static Role roleRequestToRole(RoleRequest roleRequest) {
         if (roleRequest == null || roleRequest.getId() == null) return null;
 
-        // If you really want a quick Role object (not managed), build it with only id:
         return Role.builder()
                 .id(roleRequest.getId())
-                // leave name null — don't try to infer enum/string here; service will fetch the real entity
                 .build();
     }
 

@@ -19,7 +19,7 @@ const CreateUser = () => {
     firstName: "",
     lastName: "",
     email: "",
-    role: "No Access",
+    role: "Read_Only",
   });
 
   const [emptyNameError, setEmptyNameError] = useState({
@@ -81,6 +81,7 @@ const CreateUser = () => {
                 <Input
                   label="Email *"
                   type="email"
+                  id="email"
                   name="email"
                   placeholder="Enter Email ID"
                   value={userDetail.email}

@@ -8,16 +8,18 @@ export async function handleCreateUserSubmit(e, createUserFn, navigate) {
 
   const selectedRole = form.role?.value ?? "No Access"; 
 
-  const roleId = roleEnum[selectedRole] ?? null;
+  const roleId = roleEnum[selectedRole] ?? "3";
+  
 
   const newUser = {
     firstName: form.firstName.value,
     lastName: form.lastName.value,
     email: form.email.value,
-    role: roleId,    
+    roleId: roleId,    
     loginTime: null,
     isActive: false,
   };
+  console.log(newUser);
 
   try {
     await createUserFn(newUser);

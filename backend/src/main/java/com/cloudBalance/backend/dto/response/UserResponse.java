@@ -2,7 +2,7 @@ package com.cloudBalance.backend.dto.response;
 
 import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Builder
 @Data
@@ -14,6 +14,5 @@ public class UserResponse {
     private String email;
     private RoleResponse role;
     private boolean isActive;
-    private Date lastLogin;
-
+    private LocalDateTime lastLogin;
 }

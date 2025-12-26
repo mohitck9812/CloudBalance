@@ -1,27 +1,3 @@
-export function formSubmission(formData, userData, setUser) {
-  console.log(
-    "form submitted with data email: " +
-      formData.email +
-      " and password is: " +
-      formData.password
-  );
-
-  const user = checkValidUser(formData.email, userData);
-
-  if (user[0]?.firstName) {
-    setUser(...user);
-    localStorage.setItem("authUser", JSON.stringify(user[0]));
-    return true;
-  }
-
-  return false;
-}
-
-//check valid user
-const checkValidUser = (loginEmail, userData) => {
-  return userData.filter((value) => value.email === loginEmail);
-};
-
 // Email change 
 export function handleChangeEmail(e, setEmailError, formData, setFormData) {
   const { name, value } = e.target;

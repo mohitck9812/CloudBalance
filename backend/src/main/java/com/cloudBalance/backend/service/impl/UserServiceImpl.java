@@ -10,6 +10,7 @@ import com.cloudBalance.backend.repository.UserRepository;
 import com.cloudBalance.backend.utils.Transformer;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,12 +24,14 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
     /**
      * Create user. Service fetches and attaches a managed Role entity if roleId present.
      */
     public UserResponse addUser(UserRequest userRequest) {
-        if (userRequest == null) throw new IllegalArgumentException("userRequest cannot be null");
+        //TODO: VALIDATIONS
+//        if (userRequest == null) throw new IllegalArgumentException("userRequest cannot be null");
 
         User user = Transformer.userRequestToUser(userRequest);
 
@@ -38,6 +41,7 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
             user.setRole(role);
         }
         user.setIsActive(false);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         User saved = userRepository.save(user);
         return Transformer.userToUserResponse(saved);
     }
@@ -50,7 +54,7 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
         List<User> userList = userRepository.findAll();
         return userList.stream()
                 .map(Transformer::userToUserResponse)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -86,25 +90,34 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
     public UserResponse updateUserById(Long id, @NotNull UserRequest userRequest) {
         User oldUser = findUserById(id);
 
+        // password check
+        if(userRequest.getPassword()!= null && !userRequest.getPassword().isBlank()){
+            oldUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        }
+
+        // email check
         if (userRequest.getEmail() != null && !userRequest.getEmail().isBlank()) {
             oldUser.setEmail(userRequest.getEmail());
         }
 
+        // role check
         if (userRequest.getRoleId() != null) {
             Role role = roleRepository.findById(userRequest.getRoleId())
                     .orElseThrow(() -> new NoSuchElementException("Role not found with id: " + userRequest.getRoleId()));
             oldUser.setRole(role);
         }
 
-        //StringUtils
+        //first name check
         if (userRequest.getFirstName() != null && !userRequest.getFirstName().isBlank()) {
             oldUser.setFirstName(userRequest.getFirstName());
         }
 
+        // last name check
         if (userRequest.getLastName() != null && !userRequest.getLastName().isBlank()) {
             oldUser.setLastName(userRequest.getLastName());
         }
 
+        // isActive check
         if (userRequest.getActive() != null && userRequest.getActive() != oldUser.getIsActive()) {
             oldUser.setIsActive(userRequest.getActive());
         }

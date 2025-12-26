@@ -10,6 +10,7 @@ import NotFound from "../dashboard/NotFound"
 import Home from "../dashboard/Home";
 import IsAuthenticated from "./IsAuthenticated";
 import EditUser from "../dashboard/user/editUser/EditUser";
+import Onboarding from "../dashboard/onboarding/Onboarding";
 
 const router = createBrowserRouter([
   {
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
           {
             path: "user/edit/:userID",
             element:<EditUser />
+          },
+          {
+            path: "onboarding",
+            element: <Onboarding />
           }
         ],
       },  

@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class UserController {
 
     private final UserService userService;
     private final Logger log = LoggerFactory.getLogger(UserController.class);
+    private final PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/add")
     public ResponseEntity<UserResponse> addUser(@Valid @RequestBody UserRequest user) {
@@ -37,6 +39,7 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
+        System.out.println(userService.getClass());
             UserResponse userResponse = userService.getUserById(id);
             return ResponseEntity.ok(userResponse);
     }
@@ -51,8 +54,6 @@ public class UserController {
         UserResponse deletedUser = userService.deleteUserById(id);
         return ResponseEntity.ok(deletedUser);
     }
-
-
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUserById(@PathVariable Long id, @RequestBody UserRequest userRequest){

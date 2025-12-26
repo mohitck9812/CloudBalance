@@ -3,16 +3,18 @@ import React, { useState } from "react";
 import { authData } from "./AuthContext";
 
 const AuthData = ({ children }) => {
-  const [module, setModule] = useState("Lens");
+  // const [module, setModule] = useState("Lens");
 
   const state = {
-    firstName: "",
-    lastName:"",
-    email:"",
-    role: "",
-    userId: "",
-    module,
-    setModule,
+    id:"",
+    active:"",
+    email: "",
+    firstName : "",
+    lastLogin: "",
+    role: {
+      id:"",
+      roleName:""
+    }
   }
 
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("authUser")) || state);

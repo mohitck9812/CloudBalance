@@ -6,6 +6,7 @@ public enum RoleType {
     CUSTOMER(2L),
     READ_ONLY(3L);
 
+
     private final Long id;
 
 
@@ -17,7 +18,7 @@ public enum RoleType {
         if (id == null) return null;
         for (RoleType r : RoleType.values()) {
             if (r.id.equals(id)) return r;
-        }
+      }
         throw new IllegalArgumentException("Unknown RoleType id: " + id);
     }
 
