@@ -13,6 +13,7 @@ function useFetchAllUser(){
             try{
                 const response = await api.get(`/user/all-user`);
                 setData(response.data);
+                // console.log(response.data)
             }catch(e){
                 setError(e);
             }finally{

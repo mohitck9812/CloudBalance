@@ -1,53 +1,71 @@
+/* eslint-disable no-unused-vars */
 //have to update password thing not working and active status
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { dummyData } from "../../../context/AuthContext";
 import {
   handleChangeFirstName,
   handleChangeFormEmail,
   handleChangeLastName,
 } from "../../login/ValidationFunction";
-import Input, { InputRadio, InputSelect } from "../createUser/component/Input";
+import Input, { BooleanSwitch } from "../createUser/component/Input";
+import useFetchUserByID from "../../../api/user/useFetchUserByID";
+import useEditUser from "../../../api/user/useEditUser";
+import {InputSelect} from "../createUser/component/Input"
 
 const EditUser = () => {
-  const { userData: data, setUserData: setData } = useContext(dummyData);
-    const navigate = useNavigate();
+  const { data, error, loading, getUserById } = useFetchUserByID();
+  const {
+    loading: submitLoading,
+    error: submitError,
+    editUser,
+  } = useEditUser();
+  const navigate = useNavigate();
   const { userID } = useParams();
+  const [active, setActive] = useState(false);
+  const [password, setPassword] = useState("");
+
+  useEffect(() => {
+    getUserById(userID);
+  }, [userID]);
 
   const [userDetail, setUserDetail] = useState({});
   const [emptyNameError, setEmptyNameError] = useState({});
 
   useEffect(() => {
-  const foundUser = data.find((value) => value.id == userID);
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  setUserDetail(foundUser || {});  
-  }, [userID, data]);
+    if (data === null) {
+      return;
+    }
+    // console.log(data)
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setUserDetail(data);
+    setActive(data.active);
+    console.log(data);
+  }, [data]);
 
-
-  const handleEditSubmit = (e, userDetail, data, setData) => {
+  const handleEditSubmit = (e, userDetail) => {
     e.preventDefault();
 
-  if (
-    !userDetail.firstName?.trim() ||
-    !userDetail.lastName?.trim() ||
-    !userDetail.email?.trim()
-  ) {
-    alert("Please fill all required fields");
-    return;
+    if (
+      !userDetail.firstName?.trim() ||
+      !userDetail.lastName?.trim() ||
+      !userDetail.email?.trim()
+    ) {
+      alert("Please fill all required fields");
+      return;
+    }
+    if (password.trim != "") userDetail.password = password;
+
+    userDetail.active = active;
+    // console.log(userDetail);
+    editUser(userID, userDetail);
+    alert("data modified successfuly ");
+    navigate("/dashboard/user");
+  };
+
+  if (error) {
+    return <>User Not Found</>;
   }
-
-  const updatedUsers = data.map((user) =>
-    user.id == userDetail.id ? { ...userDetail } : user
-  );
-
-  setData(updatedUsers);
-
-//   alert("User updated successfully!");
-
-  navigate("/dashboard/user");
-};
-
 
   return (
     <div>
@@ -60,10 +78,7 @@ const EditUser = () => {
           <div className="rounded shadow-xl bg-white p-2">
             <form
               className="p-3"
-              onSubmit={(e) =>
-                handleEditSubmit(e, userDetail,data, setData)
-                // console.log("edit function" + e)
-              }
+              onSubmit={(e) => handleEditSubmit(e, userDetail, data)}
             >
               <div className="flex flex-col gap-5">
                 <div className="flex gap-10">
@@ -118,39 +133,44 @@ const EditUser = () => {
                     error={emptyNameError.email}
                   />
 
-                  {/* <InputSelect
-                    label={"Select Roles"}
-                    name={"role"}
-                    id={"role"}
-                    values={[ "Admin","Read Only", "Customer"]}
-                  /> */}
-
-                    <Input
-                    label = "Password" 
-                    type = "password"
-                    name = "password"
+                  <Input
+                    label="Password"
+                    type="password"
+                    name="password"
                     placeholder="Enter New Password"
-                    value ={userDetail.password}
-                    />
-
+                    value={password}
+                    onChange={(e) => {
+                      setPassword(e.target.value);
+                    }}
+                  />
                 </div>
 
                 <div className="flex gap-10">
                   {/* to add radio button of active  */}
-                  <InputRadio 
-                  label={"Active Status"}
-                  id={"Active Status"}
-                  values={["Active", "Disabled"]}
-                  checked={1}
+
+                  <InputSelect
+                    label={"Select Roles"}
+                    name={"role"}
+                    id={"role"}
+                    values={["Admin", "Customer", "Read_Only"]}
+                    value={userDetail.role?.roleName}
+                    onChange={(e) =>
+                      setUserDetail((p) => ({ ...p, role: e.target.value }))
+                    }
                   />
-    
+
+                  <BooleanSwitch
+                    label="Account Status"
+                    value={active}
+                    onChange={setActive}
+                  />
                 </div>
                 <button
-                className="self-start my-2 rounded bg-primary p-2 transition-all duration-150 ease-in hover:cursor-pointer hover:bg-blue-600"
-                type="submit"
-              >
-                Update User
-              </button>
+                  className="self-start my-2 rounded bg-primary p-2 transition-all duration-150 ease-in hover:cursor-pointer hover:bg-blue-600"
+                  type="submit"
+                >
+                  Update User
+                </button>
               </div>
             </form>
           </div>

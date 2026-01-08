@@ -31,7 +31,7 @@ const Sidebar = ({ menu }) => {
                  }`
               }
             >
-              <img src={item.logo} alt="icon" className="w-5 h-5" />
+              <img src={item.logo} alt="icon" className="w-7 h-7" />
               <span
                 className={`font-bold text-sm transition-all duration-400 ease-in-out ${
                   menu

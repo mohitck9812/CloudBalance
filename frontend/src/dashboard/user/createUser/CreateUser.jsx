@@ -13,13 +13,14 @@ import Loading from "../../../component/loading/Loading";
 
 const CreateUser = () => {
   const navigate = useNavigate();
-  const { loading, error, createUser } = useCreateUser(); // keep name createUser
+  const { loading, error, createUser } = useCreateUser(); 
 
   const [userDetail, setUserDetail] = useState({
     firstName: "",
     lastName: "",
     email: "",
     role: "Read_Only",
+    active: false,
   });
 
   const [emptyNameError, setEmptyNameError] = useState({
@@ -96,11 +97,29 @@ const CreateUser = () => {
                   name={"role"}
                   id={"role"}
                   values={["Admin", "Customer", "Read_Only"]}
-                  // optional: make it controlled:
                   value={userDetail.role}
                   onChange={(e) => setUserDetail((p) => ({ ...p, role: e.target.value }))}
                 />
               </div>
+
+              <div className="flex gap-10">
+                <Input 
+                label="Password *"
+                type="password"
+                id="password"
+                name="password"
+                placeholder="Enter Password"
+                value={userDetail.password}
+                onChange={(e)=>{
+                  const prev = {...userDetail, "password": e.target.value};
+                  setUserDetail(prev);
+                }}
+                />
+              </div>
+
+                <div className="flex gap-10">
+
+                </div>
 
               <button
                 className="self-start my-2 rounded bg-primary p-2 transition-all duration-150 ease-in hover:cursor-pointer hover:bg-blue-600"

@@ -10,17 +10,22 @@ const Profile = () => {
   const navigate = useNavigate();
   const handleLogOut = () => {
     setUser({
-      firstName: "",
-      lastName: "",
+      id: "",
+      active: "",
       email: "",
-      role: "",
-      userId: "",
-      module: "Lens",
-      // setModule: () => {},
+      firstName: "",
+      lastLogin: "",
+      role: {
+        id: "",
+        roleName: "",
+      },
     });
+
+    // to add logout api -> that will add the jwt used in blacklisted database ( just for security )
 
     localStorage.clear();
     navigate("/", { replace: true });
+
   };
 
   return (
@@ -37,9 +42,7 @@ const Profile = () => {
         </div>
       </div>
 
-      <div 
-
-       className="pr-2 border-r-2 border-black/10 ">
+      <div className="pr-2 border-r-2 border-black/10 ">
         <p className="text-xs text-black/60"> Welcome,</p>
         <p className="font-extrabold text-primary flex gap-1">
           {user.firstName + " " + user.lastName} <img src={info} alt="i" />
@@ -47,10 +50,7 @@ const Profile = () => {
       </div>
 
       <div className="border border-primary rounded p-2 transition ease-in hover:shadow-primary hover:shadow-lg hover:cursor-pointer">
-        <button
-          onClick={handleLogOut}
-          className="flex text-primary gap-2 "
-        >
+        <button onClick={handleLogOut} className="flex text-primary gap-2 ">
           <img src={logout} alt="" /> Logout
         </button>
       </div>

@@ -2,7 +2,6 @@ import React from "react";
 import Sidebar from "../sidebar/Sidebar";
 import { Outlet } from "react-router-dom";
 import Footer from "../../component/footer/Footer";
-// import Footer from "../../component/footer/Footer";
 
 const Content = ({ menu }) => {
   return (

@@ -17,13 +17,14 @@ export async function handleCreateUserSubmit(e, createUserFn, navigate) {
     email: form.email.value,
     roleId: roleId,    
     loginTime: null,
-    isActive: false,
+    active: false,
+    password: form.password.value
   };
-  console.log(newUser);
+  // console.log(newUser);
 
   try {
+    console.log(newUser);
     await createUserFn(newUser);
-
     navigate("/dashboard/user");
   } catch (err) {
     // handle error (toast/log)

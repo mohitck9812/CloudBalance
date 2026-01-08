@@ -14,7 +14,7 @@ const Input = ({ label, error, type, placeholder, name, value, onChange, onBlur 
         onBlur={onBlur}
         className={clsx(
           "mt-1 border rounded pl-4 py-3 border-black/10 placeholder:text-black/30 focus:outline-primary/70",
-          error && "border-red-600"
+          error && "border-red-600 focus:outline-red-600"
         )}
       />
 

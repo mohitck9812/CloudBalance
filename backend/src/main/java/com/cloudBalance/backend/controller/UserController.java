@@ -3,12 +3,12 @@ package com.cloudBalance.backend.controller;
 import com.cloudBalance.backend.dto.request.UserRequest;
 import com.cloudBalance.backend.dto.response.UserResponse;
 import com.cloudBalance.backend.service.UserService;
+import com.cloudBalance.backend.utils.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,24 +24,24 @@ public class UserController {
     private final PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/add")
-    public ResponseEntity<UserResponse> addUser(@Valid @RequestBody UserRequest user) {
+    public ApiResponse<UserResponse> addUser(@Valid @RequestBody UserRequest user) {
         UserResponse userResponse = userService.addUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponse);
+        return new ApiResponse<>(HttpStatus.CREATED, "Data Created Sucessfully", userResponse);
     }
 
 
     // to edit this
     @GetMapping("/all-user")
-    public ResponseEntity<List<UserResponse>> showAllUser(){
+    public ApiResponse<List<UserResponse>> showAllUser(){
         List<UserResponse> result = userService.findAllUser();
-        return result != null ? new ResponseEntity<>(result, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return new ApiResponse<>(HttpStatus.OK,"List of all the users", result);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id){
-        System.out.println(userService.getClass());
+    public ApiResponse<UserResponse> getUserById(@PathVariable Long id){
+//        System.out.println(userService.getClass());
             UserResponse userResponse = userService.getUserById(id);
-            return ResponseEntity.ok(userResponse);
+            return new ApiResponse<>(HttpStatus.OK, "User detail of user id: " + id, userResponse);
     }
 
 //    @PostMapping("/add-temp")
@@ -50,15 +50,16 @@ public class UserController {
 //    }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<UserResponse> deleteUserById(@PathVariable Long id) {
+    public ApiResponse<UserResponse> deleteUserById(@PathVariable Long id) {
         UserResponse deletedUser = userService.deleteUserById(id);
-        return ResponseEntity.ok(deletedUser);
+        return new ApiResponse<>(HttpStatus.NO_CONTENT, "User id: " + id + " deleted successfully", deletedUser);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUserById(@PathVariable Long id, @RequestBody UserRequest userRequest){
+    public ApiResponse<UserResponse> updateUserById(@PathVariable Long id,@Valid @RequestBody UserRequest userRequest){
         UserResponse userResponse = userService.updateUserById(id, userRequest);
-        return ResponseEntity.ok(userResponse);
+        return new ApiResponse<>(HttpStatus.OK, " User id: "+ id + " updated successfully" , userResponse);
+
     }
 
 }

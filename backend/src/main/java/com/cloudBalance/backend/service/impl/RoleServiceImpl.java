@@ -28,7 +28,7 @@ public class RoleServiceImpl implements com.cloudBalance.backend.service.RoleSer
     }
 
     @Override
-    public RoleResponse addRole(RoleRequest roleRequest) {
+    public RoleResponse addRole(RoleRequest roleRequest){
         Role role = Transformer.roleRequestToRole(roleRequest);
         role.setName(RoleType.fromId(roleRequest.getId()));
         return Transformer.roleToRoleResponse(roleRepository.save(role));

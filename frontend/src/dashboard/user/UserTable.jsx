@@ -23,13 +23,11 @@ const UserTable = () => {
   },[])
 
   useEffect(() => {
-  if (Array.isArray(dataList)) {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setData(dataList);
+  if (Array.isArray(dataList.data)) {
+    setData(dataList?.data);
   } else {
     setData([]); 
   }
-  console.log(dataList)
 }, [dataList]);
 
 
@@ -52,7 +50,7 @@ const UserTable = () => {
   if(error){
     return(
       <>
-        <div className="w-full max-h-[67vh]">
+        <div className="w-full max-h-[67vh] flex justify-center items-center">
           <p className="text-7xl">Retry in a while</p>
         </div>
       </>
@@ -76,8 +74,8 @@ const UserTable = () => {
         <tbody>
           <tr
             className={clsx({
-              hidden: data.length > 0,
-              "table-row": data.length === 0,
+              hidden: data?.length > 0,
+              "table-row": data?.length === 0,
             })}
           >
             <td className="p-2">—</td>
@@ -109,7 +107,7 @@ const UserTable = () => {
                 <td className={clsx("p-2")}>{!value.lastLogin ? "--" : value.lastLogin} </td>
                 <td className={clsx("p-2")}>
                   <div className="flex gap-3">
-
+                  {/* edit Button */}
                   <button className="hover:cursor-pointer"
                   onClick={() => {handleEdit(value)}}>
                     {" "}

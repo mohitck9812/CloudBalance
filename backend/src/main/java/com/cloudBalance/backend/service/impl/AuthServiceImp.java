@@ -6,9 +6,11 @@ import com.cloudBalance.backend.dto.response.UserResponse;
 import com.cloudBalance.backend.entity.User;
 import com.cloudBalance.backend.repository.UserRepository;
 import com.cloudBalance.backend.service.AuthService;
+import com.cloudBalance.backend.utils.ApiResponse;
 import com.cloudBalance.backend.utils.AuthUtil;
 import com.cloudBalance.backend.utils.Transformer;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -39,7 +41,6 @@ public class AuthServiceImp implements AuthService {
         String token = authUtil.generateAccessToken(user);
         UserResponse userResponse  = Transformer.userToUserResponse(user);
         return new LoginResponse(token, userResponse);
-
     }
 
 }

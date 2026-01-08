@@ -7,6 +7,7 @@ public enum RoleType {
     READ_ONLY(3L);
 
 
+
     private final Long id;
 
 

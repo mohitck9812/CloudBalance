@@ -1,6 +1,7 @@
 package com.cloudBalance.backend.service.impl;
 
 import com.cloudBalance.backend.entity.Role;
+import com.cloudBalance.backend.exception.CustomException;
 import com.cloudBalance.backend.repository.RoleRepository;
 import com.cloudBalance.backend.dto.request.UserRequest;
 import com.cloudBalance.backend.dto.response.UserResponse;
@@ -10,9 +11,11 @@ import com.cloudBalance.backend.repository.UserRepository;
 import com.cloudBalance.backend.utils.Transformer;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,17 +32,17 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
     /**
      * Create user. Service fetches and attaches a managed Role entity if roleId present.
      */
+    
     public UserResponse addUser(UserRequest userRequest) {
-        //TODO: VALIDATIONS
-//        if (userRequest == null) throw new IllegalArgumentException("userRequest cannot be null");
+        if (userRequest.getPassword() == null || userRequest.getPassword().isBlank()) {
+            throw new CustomException("Password can not be empty");
+        }
 
         User user = Transformer.userRequestToUser(userRequest);
-
-        if (userRequest.getRoleId() != null) {
             Role role = roleRepository.findById(userRequest.getRoleId())
                     .orElseThrow(() -> new NoSuchElementException("Role not found with id: " + userRequest.getRoleId()));
             user.setRole(role);
-        }
+
         user.setIsActive(false);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         User saved = userRepository.save(user);
@@ -49,7 +52,6 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
     /**
      * Find all users and map to responses.
      */
-    @Transactional(readOnly = true)
     public List<UserResponse> findAllUser() {
         List<User> userList = userRepository.findAll();
         return userList.stream()
@@ -60,14 +62,12 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
     /**
      * Find user by id and mapping that to response
      */
-    @Transactional(readOnly = true)
     public UserResponse getUserById(Long id){
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
         return Transformer.userToUserResponse(user);
     }
 
-    @Transactional(readOnly = true)
     public User findUserById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with id: " + id));
@@ -87,7 +87,7 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
     /**
      * Update user fields. Only non-null / non-blank fields in request are applied.
      */
-    public UserResponse updateUserById(Long id, @NotNull UserRequest userRequest) {
+    public UserResponse updateUserById(Long id, UserRequest userRequest) {
         User oldUser = findUserById(id);
 
         // password check

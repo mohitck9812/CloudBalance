@@ -8,11 +8,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginRequest {
+public class AccountRequest {
 
-    @NotNull(message = "Email id is mandatory")
-    private String email;
+    @NotNull(message = "Account Name can not be empty")
+    private String accountName;
 
-    @NotNull(message = "Password is mandatory")
-    private String password;
+    @NotNull(message = "Account ARM can not be empty")
+    private String accountARM;
+
+
 }

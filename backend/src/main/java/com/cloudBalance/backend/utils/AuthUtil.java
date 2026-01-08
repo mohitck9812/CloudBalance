@@ -27,7 +27,8 @@ public class AuthUtil {
                 .subject(user.getUsername())
                 .claim("userId", user.getId().toString())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000*60*10))
+                //to remove last 1000 from expiration
+                .expiration(new Date(System.currentTimeMillis() + 1000*60*10*1000))
                 .signWith(getSecretKey())
                 .compact();
     }

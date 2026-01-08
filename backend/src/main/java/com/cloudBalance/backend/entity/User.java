@@ -2,6 +2,7 @@ package com.cloudBalance.backend.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
     private String lastName;
 
     @Column(nullable = false)
+    @Email
     private String email;
     private Boolean isActive;
 
@@ -40,6 +42,12 @@ public class User implements UserDetails {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id")
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<UserAccount> userAccounts;
+
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

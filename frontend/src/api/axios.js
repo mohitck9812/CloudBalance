@@ -1,5 +1,6 @@
 import axios from "axios";
 import { getToken, removeToken } from "../util/Utils";
+import { toast } from "react-toastify";
 
 const api = axios.create({
   baseURL: "http://localhost:8080",
@@ -27,11 +28,16 @@ api.interceptors.response.use(
   (error) => {
     if (
       error.response &&
-      (error.response.status === 401 || error.response.status === 403)
+      error.response.status === 403 &&
+      !error.config?.url.includes("/auth/login")
     ) {
+      // console.log(error)
+      // alert("Program stopped by interceptor")
       removeToken();
       window.location.replace("/");
+      toast.error("Authorization Error");
     }
+    toast.error()
     return Promise.reject(error);
   }
 );

@@ -17,20 +17,9 @@ const MenuList = [
     logo: Onboarding,
     path: '/dashboard/onboarding'
   },
+  
   {
-    id: 3,
-    title: "Dashboard Control Grid",
-    logo: DesktopIcon,
-    path: '/dashboard/dashboard-control-grid',
-  },
-  {
-    id: 4,
-    title: "Module Control Grid",
-    logo: ModuleIcon,
-    path: '/dashboard/module-control-grid',
-  },
-  {
-    id:5,
+    id:4,
     title: "Cost Explorer",
     logo: CostExplorer,
     path: '/dashboard/cost-explorer',
