@@ -12,7 +12,7 @@ export default function useFetchUserByID(){
             setLoading(true);
             try{
                 const response = await api.get(`/user/${userId}`);
-                setData(response.data);
+                setData(response.data?.data);
             }catch(e){
                 setError(e);
             }finally{

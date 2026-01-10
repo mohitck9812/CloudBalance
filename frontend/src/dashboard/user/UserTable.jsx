@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import Loading from "../../component/loading/Loading";
 import { handleDeleteUser } from "./deleteUser/DeleteUser";
 import useDelete from "../../api/user/useDelete";
+import { toast } from "react-toastify";
 
 const UserTable = () => {
   const navigate = useNavigate();
@@ -36,6 +37,11 @@ const UserTable = () => {
     navigate(`/dashboard/user/edit/${value.id}`);
   }
 
+  function handleErrorInAPi(){
+    navigate("/dashboard");
+    toast.error("Retry in a while")
+  }
+
   if(loading){
     return(
       <>
@@ -50,9 +56,7 @@ const UserTable = () => {
   if(error){
     return(
       <>
-        <div className="w-full max-h-[67vh] flex justify-center items-center">
-          <p className="text-7xl">Retry in a while</p>
-        </div>
+        {handleErrorInAPi}
       </>
     )
   }

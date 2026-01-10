@@ -4,6 +4,7 @@ import com.cloudBalance.backend.dto.request.LoginRequest;
 import com.cloudBalance.backend.dto.response.LoginResponse;
 import com.cloudBalance.backend.dto.response.UserResponse;
 import com.cloudBalance.backend.entity.User;
+import com.cloudBalance.backend.exception.CustomException;
 import com.cloudBalance.backend.repository.UserRepository;
 import com.cloudBalance.backend.service.AuthService;
 import com.cloudBalance.backend.utils.ApiResponse;
@@ -36,6 +37,9 @@ public class AuthServiceImp implements AuthService {
                 )
         );
         User user = (User) authentication.getPrincipal();
+        if (!user.getIsActive()) {
+            throw new CustomException("User is inactive", HttpStatus.FORBIDDEN);
+        }
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
         String token = authUtil.generateAccessToken(user);

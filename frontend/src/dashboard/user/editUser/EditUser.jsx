@@ -1,17 +1,39 @@
 /* eslint-disable no-unused-vars */
 //have to update password thing not working and active status
 
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import {
   handleChangeFirstName,
   handleChangeFormEmail,
   handleChangeLastName,
 } from "../../login/ValidationFunction";
-import Input, { BooleanSwitch } from "../createUser/component/Input";
+import Input, {
+  AccountListToAdd,
+  BooleanSwitch,
+} from "../createUser/component/Input";
 import useFetchUserByID from "../../../api/user/useFetchUserByID";
 import useEditUser from "../../../api/user/useEditUser";
-import {InputSelect} from "../createUser/component/Input"
+import { InputSelect } from "../createUser/component/Input";
+import Loading from "../../../component/loading/Loading";
+import { toast } from "react-toastify";
+import { role as roleEnum } from "../../../util/Role";
+import { authData } from "../../../context/AuthContext";
+import useGetAllAccount from "../../../api/onboarding/useGetAllAccount";
+
+const userDetailTemplate = {
+  accounts: [],
+  active: false,
+  email: "",
+  firstName: "",
+  id: null,
+  lastLogin: null,
+  password: "",
+  role: {
+    id: null,
+    roleName: "",
+  },
+};
 
 const EditUser = () => {
   const { data, error, loading, getUserById } = useFetchUserByID();
@@ -24,25 +46,44 @@ const EditUser = () => {
   const { userID } = useParams();
   const [active, setActive] = useState(false);
   const [password, setPassword] = useState("");
+  const {
+    data: allAccounts,
+    loading: accountLoading,
+    error: accountError,
+    getAllAccount,
+  } = useGetAllAccount();
 
+  const [userDetail, setUserDetail] = useState(userDetailTemplate);
+  const [emptyNameError, setEmptyNameError] = useState({});
+  const [accounts, setAccounts] = useState([]);
+  const [selectedAccounts, setSelectedAccounts] = useState([]);
+  const { user } = useContext(authData);
+
+  //--------------------setting data from api--------------------//
   useEffect(() => {
     getUserById(userID);
+    getAllAccount();
   }, [userID]);
-
-  const [userDetail, setUserDetail] = useState({});
-  const [emptyNameError, setEmptyNameError] = useState({});
 
   useEffect(() => {
     if (data === null) {
       return;
     }
-    // console.log(data)
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setUserDetail(data);
     setActive(data.active);
+    setSelectedAccounts(data.accounts.map((acc) => acc.id))
     console.log(data);
   }, [data]);
 
+  useEffect(() => {
+    console.log(allAccounts);
+    if (allAccounts) {
+      setAccounts(allAccounts);
+    }
+  }, [allAccounts]);
+
+  //------------------------------Handlers---------------------------//
   const handleEditSubmit = (e, userDetail) => {
     e.preventDefault();
 
@@ -51,20 +92,47 @@ const EditUser = () => {
       !userDetail.lastName?.trim() ||
       !userDetail.email?.trim()
     ) {
-      alert("Please fill all required fields");
+      // alert("Please fill all required fields");
       return;
     }
-    if (password.trim != "") userDetail.password = password;
-
-    userDetail.active = active;
-    // console.log(userDetail);
-    editUser(userID, userDetail);
-    alert("data modified successfuly ");
+    const payload = {
+      ...userDetail,
+      active,
+      ...(password.trim() && { password }),
+    };
+    editUser(userID, payload);
     navigate("/dashboard/user");
   };
 
+  const handleErrorInData = () => {
+    navigate("/dashboard/home");
+    toast.error("User Not Found");
+  };
+
+  const toggleAccount = (accountId) => {
+    if (user?.role.roleName !== "ADMIN") return;
+
+    setSelectedAccounts((prev) =>
+      prev.includes(accountId)
+        ? prev.filter((id) => id !== accountId)
+        : [...prev, accountId]
+    );
+    console.log(selectedAccounts);
+  };
+
+  //----------------------------UI-------------------------//
   if (error) {
-    return <>User Not Found</>;
+    return <>{handleErrorInData()}</>;
+  }
+
+  if (loading) {
+    return (
+      <>
+        <div className="flex items-center justify-center h-screen">
+          <Loading />
+        </div>
+      </>
+    );
   }
 
   return (
@@ -82,6 +150,7 @@ const EditUser = () => {
             >
               <div className="flex flex-col gap-5">
                 <div className="flex gap-10">
+                  {/* first Name */}
                   <Input
                     label="First Name *"
                     type="text"
@@ -98,6 +167,8 @@ const EditUser = () => {
                     }
                     error={emptyNameError.firstNameError}
                   />
+
+                  {/* Last Name */}
                   <Input
                     label="Last Name *"
                     type="text"
@@ -115,6 +186,8 @@ const EditUser = () => {
                     error={emptyNameError.lastNameError}
                   />
                 </div>
+
+                {/* Email */}
                 <div className="flex gap-10">
                   <Input
                     label="Email *"
@@ -133,6 +206,7 @@ const EditUser = () => {
                     error={emptyNameError.email}
                   />
 
+                  {/* Password */}
                   <Input
                     label="Password"
                     type="password"
@@ -148,25 +222,46 @@ const EditUser = () => {
                 <div className="flex gap-10">
                   {/* to add radio button of active  */}
 
+                  {/* Role Selection */}
                   <InputSelect
-                    label={"Select Roles"}
-                    name={"role"}
-                    id={"role"}
-                    values={["Admin", "Customer", "Read_Only"]}
-                    value={userDetail.role?.roleName}
+                    label="Select Roles"
+                    name="role"
+                    id="role"
+                    values={["ADMIN", "CUSTOMER", "READ_ONLY"]}
+                    value={userDetail.role?.roleName || ""}
                     onChange={(e) =>
-                      setUserDetail((p) => ({ ...p, role: e.target.value }))
+                      setUserDetail((prev) => ({
+                        ...prev,
+                        role: {
+                          ...prev.role,
+                          id: roleEnum[e.target.value],
+                          roleName: e.target.value,
+                        },
+                      }))
                     }
                   />
 
+                  {/* Active Status */}
                   <BooleanSwitch
                     label="Account Status"
                     value={active}
                     onChange={setActive}
                   />
                 </div>
+
+                {userDetail.role.id === roleEnum.CUSTOMER && (
+                  <AccountListToAdd
+                    accounts={accounts}
+                    selectedAccounts={selectedAccounts}
+                    user={user}
+                    loading={accountLoading}
+                    toggleAccount={toggleAccount}
+                  />
+                )}
+
+                {/* Submit button */}
                 <button
-                  className="self-start my-2 rounded bg-primary p-2 transition-all duration-150 ease-in hover:cursor-pointer hover:bg-blue-600"
+                  className="self-start my-2 rounded text-white bg-primary p-2 transition-all duration-150 ease-in hover:cursor-pointer hover:bg-blue-600"
                   type="submit"
                 >
                   Update User

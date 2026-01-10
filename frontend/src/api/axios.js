@@ -31,10 +31,9 @@ api.interceptors.response.use(
       error.response.status === 403 &&
       !error.config?.url.includes("/auth/login")
     ) {
+      // removeToken();
+      // window.location.replace("/");
       // console.log(error)
-      // alert("Program stopped by interceptor")
-      removeToken();
-      window.location.replace("/");
       toast.error("Authorization Error");
     }
     toast.error()

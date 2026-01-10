@@ -3,6 +3,7 @@ package com.cloudBalance.backend.dto.response;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Builder
 @Data
@@ -15,4 +16,5 @@ public class UserResponse {
     private RoleResponse role;
     private boolean isActive;
     private LocalDateTime lastLogin;
+    private List<AccountResponse> accounts;
 }

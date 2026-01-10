@@ -15,6 +15,7 @@ public class UserRequest {
     @NotNull(message = "Role id is required")
     private Long roleId;
 
+    @NotNull(message = "Password field is required")
     private String password;
 
     @NotBlank(message = "First name is required")
@@ -29,5 +30,7 @@ public class UserRequest {
     @NotNull(message = "Active status is required")
     private Boolean active;
 
-    private List<Account> account;
+    @Builder.Default
+    private List<Long> accountIds = List.of();
+
 }

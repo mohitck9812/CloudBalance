@@ -10,11 +10,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AccountRequest {
 
+    @NotNull(message = "Id can not be null")
+    private Long id;
+
     @NotNull(message = "Account Name can not be empty")
-    private String accountName;
+    private String name;
 
-    @NotNull(message = "Account ARM can not be empty")
-    private String accountARM;
-
+    @NotNull(message = "Account ARN can not be empty")
+    private String arn;
 
 }

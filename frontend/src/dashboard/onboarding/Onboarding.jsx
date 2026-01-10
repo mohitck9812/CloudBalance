@@ -3,9 +3,15 @@ import IamRoleCreation from "./component/IamRoleCreation";
 import OnboardingButton from "./component/OnboardingButton";
 import PolicyManagement from "./component/PolicyManagement";
 import CUR from "./component/CUR";
+import useAccountCreation from "../../api/onboarding/useAccountCreation";
+import { useNavigate } from "react-router";
+import Loading from "../../component/loading/Loading";
 
 const Onboarding = () => {
   const [page, setPage] = useState(1);
+  const {loading, createAccount} = useAccountCreation();
+  const[account, setAccount] = useState({});
+  const navigate = useNavigate();
 
   const changePage = (e) => {
     const { name } = e.target;
@@ -13,14 +19,23 @@ const Onboarding = () => {
     if (name == "prev") setPage((p) => p - 1);
   };
 
-  const handleSubmit = (e) => {
-    console.log(e);
+  const handleSubmit = () => {
+    createAccount(account);
+    navigate("/dashboard");
   };
+
+  if(loading){
+    return(
+      <>
+        <Loading />
+      </>
+    )
+  }
 
   return (
     <>
       <div className="p-9 h-[85vh] overflow-y-scroll">
-        {(page == 1) && <IamRoleCreation />}
+        {(page == 1) && <IamRoleCreation account={account} setAccount={setAccount}/>}
         {(page == 2) && <PolicyManagement />}
         {(page == 3) && <CUR />}
 

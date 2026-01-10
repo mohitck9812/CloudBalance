@@ -6,6 +6,8 @@ import clsx from "clsx";
 import { authData } from "../../context/AuthContext";
 import { useNavigate } from "react-router";
 import useLogin from "../../api/user/useLogin";
+import Loading from "../../component/loading/Loading";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const { setUser } = useContext(authData);
@@ -39,8 +41,7 @@ const Login = () => {
       navigate("/dashboard");
       // eslint-disable-next-line no-unused-vars
     } catch (err) {
-      setEmailError("Invalid credentials");
-      setPasswordError("Invalid credentials");
+      toast.error("Invalid Credentials")
       return;
     }
   };
@@ -51,7 +52,11 @@ const Login = () => {
     //
     return (
       <>
-        <div className="flex items-center justify-center">Loading User</div>
+        {/* <div className="flex items-center justify-center">Loading User</div> */}
+        <div className="h-screen flex items-center justify-center">
+          <Loading />
+        </div>
+        
       </>
     );
   }

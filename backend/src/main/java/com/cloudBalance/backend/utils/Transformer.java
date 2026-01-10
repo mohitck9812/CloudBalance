@@ -1,5 +1,7 @@
 package com.cloudBalance.backend.utils;
 
+import com.cloudBalance.backend.dto.request.AccountRequest;
+import com.cloudBalance.backend.dto.response.AccountResponse;
 import com.cloudBalance.backend.entity.Account;
 import com.cloudBalance.backend.entity.UserAccount;
 import com.cloudBalance.backend.enums.RoleType;
@@ -9,7 +11,10 @@ import com.cloudBalance.backend.entity.Role;
 import com.cloudBalance.backend.dto.request.UserRequest;
 import com.cloudBalance.backend.dto.response.UserResponse;
 import com.cloudBalance.backend.entity.User;
+import jakarta.validation.Valid;
 import org.springframework.lang.Nullable;
+
+import java.util.List;
 
 
 public class Transformer {
@@ -17,15 +22,25 @@ public class Transformer {
     // user -> user response (safe, null-checking)
     public static UserResponse userToUserResponse(User user) {
 
-        RoleResponse roleResp;
-        Role role = user.getRole();
-             String roleName = role.getName().toString();
-
+        RoleResponse roleResp = null;
+        if (user.getRole() != null) {
             roleResp = RoleResponse.builder()
-                    .id(role.getId())
-                    .roleName(roleName)
+                    .id(user.getRole().getId())
+                    .roleName(
+                            user.getRole().getName() != null
+                                    ? user.getRole().getName().name()
+                                    : null
+                    )
                     .build();
+        }
 
+        List<AccountResponse> accounts =
+                user.getUserAccounts() == null
+                        ? List.of()
+                        : user.getUserAccounts().stream()
+                        .map(UserAccount::getAccount)
+                        .map(Transformer::accountToAccountResponse)
+                        .toList();
 
         return UserResponse.builder()
                 .id(user.getId())
@@ -33,10 +48,12 @@ public class Transformer {
                 .lastName(user.getLastName())
                 .email(user.getEmail())
                 .role(roleResp)
-                .isActive(user.getIsActive())
+                .isActive(Boolean.TRUE.equals(user.getIsActive()))
                 .lastLogin(user.getLastLogin())
+                .accounts(accounts)
                 .build();
     }
+
 
     // userRequest -> user (do NOT attach Role entity here)
     // The service should set the Role by loading it from RoleRepository.
@@ -49,11 +66,6 @@ public class Transformer {
                 .password(userRequest.getPassword()!=null ? userRequest.getPassword() : "")
 //                .role()
                 .build();
-    }
-
-    // roleId -> RoleRequest DTO
-    public static Role roleIdToRoleRequest(Long id) {
-        return roleRequestToRole(RoleRequest.builder().id(id).build());
     }
 
     // Role -> RoleResponse
@@ -88,4 +100,36 @@ public class Transformer {
 //                .linkedAt(LocalDateTime.now())
                 .build();
     }
+
+    public static Account accountRequestToAccount(AccountRequest accountRequest) {
+        return Account.builder()
+                .id(accountRequest.getId())
+                .name(accountRequest.getName())
+                .arn(accountRequest.getArn())
+                .build();
+    }
+
+    public static AccountResponse accountToAccountResponse(Account account) {
+        return AccountResponse.builder()
+                .id(account.getId())
+                .name(account.getName())
+                .arn(account.getArn())
+                .build();
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

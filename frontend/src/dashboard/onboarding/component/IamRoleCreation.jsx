@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import IndexPointer from "./IndexPointer.jsx";
 import ContentCopyTwoToneIcon from "@mui/icons-material/ContentCopyTwoTone";
 import { Data } from "./CustomerTrustPolicy.js";
@@ -6,14 +6,13 @@ import img from "../../../assets/onbording/createiam.png";
 import Input from "../../user/createUser/component/Input.jsx";
 import { toast } from "react-toastify";
 
-const IamRoleCreation = () => {
+const IamRoleCreation = ({account,setAccount}) => {
   const copyToClipboard = (text) => {
     navigator.clipboard.writeText(text);
     toast.success("text copied")
   };
 
-  const[account, setAccount] = useState({});
-
+  //------------------handler---------------------//
   const handleChange =(e) =>{
     const {name, value} = e.target;
     setAccount({
@@ -21,6 +20,7 @@ const IamRoleCreation = () => {
       [name]: value,
     })    
   }
+
 
   return (
     <div id="accountCreation">
@@ -40,8 +40,7 @@ const IamRoleCreation = () => {
             <div className="flex gap-4">
               <IndexPointer num={2} />
               In theTrusted entity typesection, selectCustom trust
-              policy.Replace the prefilled policy with the policy provided below
-              -classN=""
+              policy.Replace the prefilled policy with the policy provided below -
             </div>
 
             <div className=" ">
@@ -125,7 +124,7 @@ const IamRoleCreation = () => {
                 placeholder="Enter Account ID"
                 value={account.id}
                 onChange={handleChange}
-                readOnly={true}
+                readOnly={false}
               />
             </div>
             <Input 

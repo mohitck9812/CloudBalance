@@ -20,15 +20,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final Logger log = LoggerFactory.getLogger(UserController.class);
-    private final PasswordEncoder passwordEncoder;
 
     @PostMapping(value = "/add")
     public ApiResponse<UserResponse> addUser(@Valid @RequestBody UserRequest user) {
         UserResponse userResponse = userService.addUser(user);
         return new ApiResponse<>(HttpStatus.CREATED, "Data Created Sucessfully", userResponse);
     }
-
 
     // to edit this
     @GetMapping("/all-user")
