@@ -1,32 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import usersIcon from "../../assets/users.svg";
-import { authData } from "../../context/AuthContext";
 import info from "../../assets/info.svg";
-import logout from "../../assets/logoutIcon.svg";
+import logoutIcon from "../../assets/logoutIcon.svg";
 import { useNavigate } from "react-router";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/auth/auth.actions";
 
 const Profile = () => {
-  const { user, setUser } = useContext(authData);
+  // const { user, setUser } = useContext(authData);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+const user = useSelector((state) => state.auth.user);
   const handleLogOut = () => {
-    setUser({
-      id: "",
-      active: "",
-      email: "",
-      firstName: "",
-      lastLogin: "",
-      role: {
-        id: "",
-        roleName: "",
-      },
-    });
-
-    // to add logout api -> that will add the jwt used in blacklisted database ( just for security )
-
-    localStorage.clear();
-    navigate("/", { replace: true });
-
-  };
+    //to add logout api 
+  dispatch(logout());
+  navigate("/", { replace: true });
+};
 
   return (
     <div className="flex h-full justify-center items-center gap-2">
@@ -51,7 +40,7 @@ const Profile = () => {
 
       <div className="border border-primary rounded p-2 transition ease-in hover:shadow-primary hover:shadow-lg hover:cursor-pointer">
         <button onClick={handleLogOut} className="flex text-primary gap-2 ">
-          <img src={logout} alt="" /> Logout
+          <img src={logoutIcon} alt="" /> Logout
         </button>
       </div>
     </div>

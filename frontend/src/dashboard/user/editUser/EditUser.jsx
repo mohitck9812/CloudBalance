@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 //have to update password thing not working and active status
 
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import {
   handleChangeFirstName,
@@ -19,8 +19,8 @@ import { InputSelect } from "../createUser/component/Input";
 import Loading from "../../../component/loading/Loading";
 import { toast } from "react-toastify";
 import { role as roleEnum } from "../../../util/Role";
-import { authData } from "../../../context/AuthContext";
 import useGetAllAccount from "../../../api/onboarding/useGetAllAccount";
+import { useSelector } from "react-redux";
 
 const userDetailTemplate = {
   accounts: [],
@@ -58,7 +58,7 @@ const EditUser = () => {
   const [emptyNameError, setEmptyNameError] = useState({});
   const [accounts, setAccounts] = useState([]);
   const [selectedAccounts, setSelectedAccounts] = useState([]);
-  const { user } = useContext(authData);
+  const user = useSelector((state) => state.auth.user);
 
   //--------------------setting data from api--------------------//
   useEffect(() => {

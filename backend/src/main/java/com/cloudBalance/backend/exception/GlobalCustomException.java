@@ -1,6 +1,7 @@
 package com.cloudBalance.backend.exception;
 
 import com.cloudBalance.backend.utils.ApiResponse;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -59,5 +60,20 @@ public class GlobalCustomException {
     public ResponseEntity<ApiResponse<String>> badCredentialsExceptions(BadCredentialsException ex){
         ApiResponse<String> response = new ApiResponse<>(HttpStatus.FORBIDDEN, "Invalid Credentials", ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<String>> dataIntegrityViolation(DataIntegrityViolationException ex) {
+        String message = "Duplicate value";
+        if (ex.getMessage().contains("uk_user_email")) {
+            message = "Email already exists";
+        }
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(new ApiResponse<>(
+                        HttpStatus.BAD_REQUEST,
+                        message,
+                        "Please use a different email"
+                ));
     }
 }

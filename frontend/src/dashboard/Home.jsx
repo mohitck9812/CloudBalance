@@ -1,8 +1,10 @@
-import React, { useContext } from 'react'
-import { authData } from '../context/AuthContext';
+
+import { useSelector } from 'react-redux';
 
 const Home = () => {
-    const { user } = useContext(authData);
+    // const { user } = useContext(authData);
+    const user = useSelector((state) => state.auth.user);
+
   return (
     <div>
       <div className='flex flex-col h-[88vh] justify-center items-center'>

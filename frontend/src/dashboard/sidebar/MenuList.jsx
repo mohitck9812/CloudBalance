@@ -10,14 +10,14 @@ const MenuList = [
     title: "Users",
     logo: UserIcon,
     path: "/dashboard/user",
-    allowedRoles: ["ADMIN","READ-ONLY"],
+    allowedRoles: ["ADMIN","READ_ONLY"],
   },
   {
     id: 2,
     title: "Onboarding",
     logo: Onboarding,
     path: "/dashboard/onboarding",
-    allowedRoles: ["ADMIN","READ-ONLY"],
+    allowedRoles: ["ADMIN","READ_ONLY"],
   },
   {
     id: 3,
@@ -31,7 +31,7 @@ const MenuList = [
     title: "AWS",
     logo: DesktopIcon,
     path: "/dashboard/aws",
-    allowedRoles: ["ADMIN", "CUSTOMER","READ-ONLY"],
+    allowedRoles: ["ADMIN", "CUSTOMER","READ_ONLY"],
   },
 ];
 

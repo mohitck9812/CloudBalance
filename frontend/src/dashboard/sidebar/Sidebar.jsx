@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { NavLink } from "react-router-dom";
 import MenuList from "./MenuList";
-import { authData } from "../../context/AuthContext";
+import { useSelector } from "react-redux";
 
 const Sidebar = ({ menu }) => {
-
-  const { user } = useContext(authData);
+  // const { user } = useContext(authData);
+  const user = useSelector((state) => state.auth.user);
   const role = user?.role?.roleName;
 
   const filteredMenu = MenuList.filter((item) =>
@@ -23,8 +23,9 @@ const Sidebar = ({ menu }) => {
     <div
       className={`flex flex-col bg-white shadow-lg h-[calc(100vh-75px)]
         transition-all duration-300 ease-in-out
-        ${menu ? "w-80": "w-18"}
-      `}>
+        ${menu ? "w-80" : "w-18"}
+      `}
+    >
       <ul className="flex flex-col gap-2 p-4">
         {filteredMenu.map((item) => (
           <li key={item.id}>

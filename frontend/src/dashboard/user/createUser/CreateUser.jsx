@@ -1,5 +1,5 @@
 // src/.../CreateUser.jsx
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Input, { AccountListToAdd, InputSelect } from "./component/Input";
 import {
   handleChangeFormEmail,
@@ -11,10 +11,12 @@ import { useNavigate } from "react-router";
 import useCreateUser from "../../../api/user/UseCreateUser";
 import Loading from "../../../component/loading/Loading";
 import useGetAllAccount from "../../../api/onboarding/useGetAllAccount";
-import { authData } from "../../../context/AuthContext";
+import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const CreateUser = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth.user);
   const { loading, error, createUser } = useCreateUser();
   const {
     data,
@@ -31,14 +33,15 @@ const CreateUser = () => {
   });
   const [accounts, setAccounts] = useState();
   const [selectedAccounts, setSelectedAccounts] = useState([]);
-  const { user } = useContext(authData);
+
+  // const { user } = useContext(authData);
   const [emptyNameError, setEmptyNameError] = useState({
     firstNameError: "",
     lastNameError: "",
     emailError: "",
     role: {
       id: null,
-      name: ""
+      name: "",
     },
   });
 
@@ -66,17 +69,16 @@ const CreateUser = () => {
     // console.log(selectedAccounts);
   };
 
+  function handleError() {
+    toast.error("Failed to create user");
+    window.location.replace("/dashboard/user");
+  }
+
   //---------------------------UI-------------------//
   if (loading) return <Loading />;
 
   if (error) {
-    return (
-      <div className="bg-black/10 flex flex-col gap-5 h-[calc(100vh-132px)]">
-        <div className="w-full p-5 border-b border-black/15">
-          Retry In A While....
-        </div>
-      </div>
-    );
+    { handleError }
   }
 
   return (
@@ -89,7 +91,9 @@ const CreateUser = () => {
         <div className="rounded shadow-xl bg-white p-2">
           <form
             className="p-3"
-            onSubmit={(e) => handleCreateUserSubmit(e, createUser, navigate, selectedAccounts)}
+            onSubmit={(e) =>
+              handleCreateUserSubmit(e, createUser, navigate, selectedAccounts)
+            }
           >
             <div className="flex flex-col gap-5">
               <div className="flex gap-10">
@@ -153,7 +157,7 @@ const CreateUser = () => {
                   values={["ADMIN", "CUSTOMER", "READ_ONLY"]}
                   value={userDetail.role}
                   onChange={(e) =>
-                    setUserDetail((p) => ({ ...p, role:e.target.value }))
+                    setUserDetail((p) => ({ ...p, role: e.target.value }))
                   }
                 />
               </div>
@@ -173,7 +177,15 @@ const CreateUser = () => {
                 />
               </div>
 
-              {userDetail?.role === "CUSTOMER" && <AccountListToAdd accounts={accounts} selectedAccounts={selectedAccounts} user={user} toggleAccount={toggleAccount} loading={accountLoading}/>}
+              {userDetail?.role === "CUSTOMER" && (
+                <AccountListToAdd
+                  accounts={accounts}
+                  selectedAccounts={selectedAccounts}
+                  user={user}
+                  toggleAccount={toggleAccount}
+                  loading={accountLoading}
+                />
+              )}
 
               <div className="flex gap-10"></div>
 

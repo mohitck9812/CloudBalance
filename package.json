@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "fusioncharts": "^4.2.0",
+    "react-fusioncharts": "^4.2.0",
+    "react-redux": "^9.2.0",
+    "redux": "^5.0.1",
+    "redux-thunk": "^3.1.0"
+  }
+}
