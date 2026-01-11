@@ -2,22 +2,62 @@ package com.cloudBalance.backend.exception;
 
 import com.cloudBalance.backend.utils.ApiResponse;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-
 @RestControllerAdvice
 public class GlobalCustomException {
 
-//    @ExceptionHandler(MethodArgumentNotValidException.class)
-//    public ApiResponse<String> methodArgumentNotValidException(MethodArgumentNotValidException e){
-//        return new ApiResponse<String>(HttpStatus.BAD_REQUEST,e.getMessage(),"Method argument not valid error");
-//    }
-
     @ExceptionHandler(CustomException.class)
-    public ApiResponse<String> customExceptionHandler(CustomException e){
-        return new ApiResponse<>(e.getHttpStatus(), e.getMessage(),e.getMessage());
+    public ResponseEntity<ApiResponse<String>> customExceptionHandler(CustomException e) {
+
+        ApiResponse<String> response = new ApiResponse<>(
+                e.getHttpStatus(),
+                e.getMessage(),
+                e.getMessage()
+        );
+
+        return ResponseEntity
+                .status(e.getHttpStatus())
+                .body(response);
     }
 
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<ApiResponse<String>> disabledException(DisabledException ex) {
+
+        ApiResponse<String> response = new ApiResponse<>(
+                HttpStatus.FORBIDDEN,
+                "Account is not active",
+                ex.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<String>> methodArgumentNotValidException(
+            MethodArgumentNotValidException ex
+    ) {
+        ApiResponse<String> response = new ApiResponse<>(
+                HttpStatus.BAD_REQUEST,
+                "Validation failed",
+                ex.getBindingResult().getFieldError().getDefaultMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<String>> badCredentialsExceptions(BadCredentialsException ex){
+        ApiResponse<String> response = new ApiResponse<>(HttpStatus.FORBIDDEN, "Invalid Credentials", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
 }

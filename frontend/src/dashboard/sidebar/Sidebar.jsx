@@ -1,8 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import MenuList from "./MenuList";
+import { authData } from "../../context/AuthContext";
 
 const Sidebar = ({ menu }) => {
+
+  const { user } = useContext(authData);
+  const role = user?.role?.roleName;
+
+  const filteredMenu = MenuList.filter((item) =>
+    item.allowedRoles.includes(role)
+  );
+
   return (
     // <div className={`flex flex-col bg-white h-dvh w-80 shadow-lg ${menu?'block':'hidden'}`}>
     // <div
@@ -17,7 +26,7 @@ const Sidebar = ({ menu }) => {
         ${menu ? "w-80": "w-18"}
       `}>
       <ul className="flex flex-col gap-2 p-4">
-        {MenuList.map((item) => (
+        {filteredMenu.map((item) => (
           <li key={item.id}>
             <NavLink
               to={item.path}

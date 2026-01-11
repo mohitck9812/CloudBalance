@@ -5,26 +5,34 @@ import CostExplorer from '../../assets/MenuList/costExplorer.svg'
 import Onboarding from '../../assets/MenuList/onboarding.svg'
 
 const MenuList = [
-  {   
+  {
     id: 1,
     title: "Users",
     logo: UserIcon,
-    path: '/dashboard/user',
+    path: "/dashboard/user",
+    allowedRoles: ["ADMIN","READ-ONLY"],
   },
   {
-    id:2,
+    id: 2,
     title: "Onboarding",
     logo: Onboarding,
-    path: '/dashboard/onboarding'
+    path: "/dashboard/onboarding",
+    allowedRoles: ["ADMIN","READ-ONLY"],
   },
-  
   {
-    id:4,
+    id: 3,
     title: "Cost Explorer",
     logo: CostExplorer,
-    path: '/dashboard/cost-explorer',
-
-  }
+    path: "/dashboard/cost-explorer",
+    allowedRoles: ["ADMIN", "CUSTOMER", "READ_ONLY"],
+  },
+  {
+    id: 4,
+    title: "AWS",
+    logo: DesktopIcon,
+    path: "/dashboard/aws",
+    allowedRoles: ["ADMIN", "CUSTOMER","READ-ONLY"],
+  },
 ];
 
 export default MenuList;

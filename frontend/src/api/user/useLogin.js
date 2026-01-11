@@ -12,7 +12,7 @@ function useLogin() {
     try {
       const resposne = await api.post(`/auth/login`, body);
       setData(resposne.data);
-      // console.log(resposne);
+      console.log(resposne);
       return resposne.data.data;
     } catch (err) {
       if (err.response?.status === 401) {

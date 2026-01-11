@@ -36,7 +36,10 @@ api.interceptors.response.use(
       // console.log(error)
       toast.error("Authorization Error");
     }
-    toast.error()
+    if (error.response.data.message) {
+      toast.error(error.response.data.message);
+    }
+    toast.error();
     return Promise.reject(error);
   }
 );

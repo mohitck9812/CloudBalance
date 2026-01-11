@@ -29,8 +29,6 @@ const Login = () => {
       if (!formData.password) setPasswordError("This field is required");
       return;
     }
-
-    try {
       const response = await loginFunction({
         email: formData.email,
         password: formData.password,
@@ -40,10 +38,7 @@ const Login = () => {
       setUser(response.userResponse);
       navigate("/dashboard");
       // eslint-disable-next-line no-unused-vars
-    } catch (err) {
-      toast.error("Invalid Credentials")
-      return;
-    }
+    
   };
 
   if (loading) {

@@ -74,11 +74,9 @@ const EditUser = () => {
     setUserDetail(data);
     setActive(data.active);
     setSelectedAccounts(data.accounts.map((acc) => acc.id))
-    console.log(data);
   }, [data]);
 
   useEffect(() => {
-    // console.log(allAccounts);
     if (allAccounts) {
       setAccounts(allAccounts);
     }
@@ -86,7 +84,6 @@ const EditUser = () => {
 
   //------------------------------Handlers---------------------------//
   const handleEditSubmit = (e, userDetail) => {
-    console.log("Inside handle Edit Submit")
     e.preventDefault();
 
     if (
@@ -108,7 +105,6 @@ const EditUser = () => {
       roleId,
       ...(password.trim() && { password }),
     };
-    console.log(payload)
     editUser(userID, payload);
     navigate("/dashboard/user");
   };
