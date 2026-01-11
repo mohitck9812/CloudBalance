@@ -37,6 +37,8 @@ dependencies {
 	runtimeOnly'io.jsonwebtoken:jjwt-jackson:0.12.6'
 	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-devtools
 	implementation'org.springframework.boot:spring-boot-devtools:4.0.0'
+	//snowflake dependency
+	implementation 'net.snowflake:snowflake-jdbc:3.15.1'
 	compileOnly 'org.projectlombok:lombok'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.mysql:mysql-connector-j:8.3.0'

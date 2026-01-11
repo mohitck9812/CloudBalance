@@ -131,8 +131,12 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
     @Transactional
     public UserResponse updateUserById(Long id, UserRequest request) {
 
+
         User user = findUserById(id);
 
+        if(request.getPassword() != null && !(request.getPassword().isBlank())){
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
         user.setFirstName(request.getFirstName());
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());

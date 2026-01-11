@@ -1,16 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import BrandImage from "../../assets/Cloudkeeper_New.svg";
 import Input from "../../component/Login/Input";
 import { handleChangeEmail, handleChangePassword } from "./ValidationFunction";
 import clsx from "clsx";
-import { authData } from "../../context/AuthContext";
+import { useDispatch } from "react-redux";
+import { loginSuccess } from "../../store/auth/auth.actions";
 import { useNavigate } from "react-router";
 import useLogin from "../../api/user/useLogin";
 import Loading from "../../component/loading/Loading";
-import { toast } from "react-toastify";
 
 const Login = () => {
-  const { setUser } = useContext(authData);
+  // const { setUser } = useContext(authData);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, loginUser: loginFunction } = useLogin();
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const Login = () => {
   const [emailError, setEmailError] = useState(null);
   const [passwordError, setPasswordError] = useState(null);
 
-  //login button function
+  //----------------login button function--------------
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,16 +30,17 @@ const Login = () => {
       if (!formData.password) setPasswordError("This field is required");
       return;
     }
-      const response = await loginFunction({
-        email: formData.email,
-        password: formData.password,
-      });
-      localStorage.setItem("jwt", response.jwt);
-      localStorage.setItem("authUser", JSON.stringify(response.userResponse));
-      setUser(response.userResponse);
-      navigate("/dashboard");
-      // eslint-disable-next-line no-unused-vars
-    
+    const response = await loginFunction({
+      email: formData.email,
+      password: formData.password,
+    });
+
+    localStorage.setItem("jwt", response.jwt);
+    localStorage.setItem("authUser", JSON.stringify(response.userResponse));
+
+    dispatch(loginSuccess(response.userResponse, response.jwt));
+
+    navigate("/dashboard");
   };
 
   if (loading) {
@@ -51,7 +53,6 @@ const Login = () => {
         <div className="h-screen flex items-center justify-center">
           <Loading />
         </div>
-        
       </>
     );
   }
@@ -105,7 +106,13 @@ const Login = () => {
 
               <button
                 type="submit"
-                disabled={emailError || passwordError || loading || formData.email.length ==0 || formData.password.length == 0}
+                disabled={
+                  emailError ||
+                  passwordError ||
+                  loading ||
+                  formData.email.length == 0 ||
+                  formData.password.length == 0
+                }
                 className={clsx(
                   "bg-primary text-white p-3 rounded border-0 transition-all duration-200",
                   "hover:shadow-[-6px_13px_15px_#0a3ca24a]",

@@ -1,10 +1,7 @@
-import React, { useContext } from "react";
-// import dropDown from "../../assets/dropDown.svg";
-import { authData } from '../../context/AuthContext';
+import React, { useState } from "react";
 
 const Module = () => {
-    const {module,setModule} = useContext(authData)
-//   const [module, setModule] = useState("Lens");
+  const [module, setModule] = useState("Lens");
 
   return (
     <div className="flex flex-col pt-2">

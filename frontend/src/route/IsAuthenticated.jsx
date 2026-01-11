@@ -1,16 +1,18 @@
-import React, { useContext } from 'react'
-import { authData } from '../context/AuthContext';
-import { Navigate } from 'react-router';
+import { useSelector } from "react-redux";
+import { Navigate } from "react-router";
 
-const IsAuthenticated = ({children}) => {
-  const { user } = useContext(authData);
+const IsAuthenticated = ({ children }) => {
+  const { isAuthenticated, loading } = useSelector(
+    (state) => state.auth
+  );
 
+  if (loading) return null;
 
-  if (user?.firstName) {
-  return <Navigate to="/dashboard" replace />;
-}
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return children;
-}
+};
 
-export default IsAuthenticated
+export default IsAuthenticated;
