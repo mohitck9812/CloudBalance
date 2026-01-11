@@ -2,6 +2,7 @@ package com.cloudBalance.backend.utils;
 
 import com.cloudBalance.backend.dto.request.AccountRequest;
 import com.cloudBalance.backend.dto.response.AccountResponse;
+import com.cloudBalance.backend.dto.response.UserAccountResponse;
 import com.cloudBalance.backend.entity.Account;
 import com.cloudBalance.backend.entity.UserAccount;
 import com.cloudBalance.backend.enums.RoleType;
@@ -11,8 +12,6 @@ import com.cloudBalance.backend.entity.Role;
 import com.cloudBalance.backend.dto.request.UserRequest;
 import com.cloudBalance.backend.dto.response.UserResponse;
 import com.cloudBalance.backend.entity.User;
-import jakarta.validation.Valid;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -34,13 +33,10 @@ public class Transformer {
                     .build();
         }
 
-        List<AccountResponse> accounts =
-                user.getUserAccounts() == null
-                        ? List.of()
-                        : user.getUserAccounts().stream()
-                        .map(UserAccount::getAccount)
-                        .map(Transformer::accountToAccountResponse)
-                        .toList();
+        List<UserAccountResponse> accounts= user.getUserAccounts()== null?List.of(): user.getUserAccounts().stream()
+                .map(UserAccount::getAccount)
+                .map(Transformer::accountToUserAccountResponse)
+                .toList();
 
         return UserResponse.builder()
                 .id(user.getId())
@@ -84,15 +80,6 @@ public class Transformer {
                 .build();
     }
 
-
-    public static RoleType roleTypeFromId(Long id) {
-        try {
-            return RoleType.fromId(id);
-        }  catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     public static UserAccount userAndAccountToUserAccount(User user, Account account){
         return UserAccount.builder()
                 .user(user)
@@ -114,6 +101,12 @@ public class Transformer {
                 .id(account.getId())
                 .name(account.getName())
                 .arn(account.getArn())
+                .build();
+    }
+
+    public static UserAccountResponse accountToUserAccountResponse(Account account){
+        return UserAccountResponse.builder()
+                .id(account.getId())
                 .build();
     }
 }

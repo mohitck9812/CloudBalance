@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 /* eslint-disable no-unused-vars */
 //have to update password thing not working and active status
 
@@ -77,7 +78,7 @@ const EditUser = () => {
   }, [data]);
 
   useEffect(() => {
-    console.log(allAccounts);
+    // console.log(allAccounts);
     if (allAccounts) {
       setAccounts(allAccounts);
     }
@@ -85,6 +86,7 @@ const EditUser = () => {
 
   //------------------------------Handlers---------------------------//
   const handleEditSubmit = (e, userDetail) => {
+    console.log("Inside handle Edit Submit")
     e.preventDefault();
 
     if (
@@ -95,11 +97,18 @@ const EditUser = () => {
       // alert("Please fill all required fields");
       return;
     }
+    userDetail.accountIds = selectedAccounts
+    const roleId = userDetail.role.id;
+    if(roleId != 2){
+      userDetail.accountIds = []
+    }
     const payload = {
       ...userDetail,
       active,
+      roleId,
       ...(password.trim() && { password }),
     };
+    console.log(payload)
     editUser(userID, payload);
     navigate("/dashboard/user");
   };
@@ -117,7 +126,6 @@ const EditUser = () => {
         ? prev.filter((id) => id !== accountId)
         : [...prev, accountId]
     );
-    console.log(selectedAccounts);
   };
 
   //----------------------------UI-------------------------//

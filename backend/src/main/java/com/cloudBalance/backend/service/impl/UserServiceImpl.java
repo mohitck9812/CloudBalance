@@ -20,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -120,6 +121,7 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
 //        user.setIsActive(false);
 //        userRepository.save(user);
         userRepository.deleteById(id);
+
         return Transformer.userToUserResponse(user);
     }
 
@@ -127,68 +129,55 @@ public class UserServiceImpl implements com.cloudBalance.backend.service.UserSer
      * Update user fields. Only non-null / non-blank fields in request are applied.
      */
     @Transactional
-    public UserResponse updateUserById(Long id, UserRequest userRequest) {
+    public UserResponse updateUserById(Long id, UserRequest request) {
 
         User user = findUserById(id);
 
-        if (userRequest.getPassword() != null && !userRequest.getPassword().isBlank()) {
-            user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
-        }
+        user.setFirstName(request.getFirstName());
+        user.setLastName(request.getLastName());
+        user.setEmail(request.getEmail());
+        user.setIsActive(request.getActive());
 
-        user.setEmail(userRequest.getEmail());
-        user.setFirstName(userRequest.getFirstName());
-        user.setLastName(userRequest.getLastName());
-        user.setIsActive(userRequest.getActive());
-
-        Role role = roleRepository.findById(userRequest.getRoleId())
-                .orElseThrow(() ->
-                        new NoSuchElementException("Role not found with id: " + userRequest.getRoleId())
-                );
+        Role role = roleRepository.findById(request.getRoleId())
+                .orElseThrow(() -> new RuntimeException("Role not found"));
 
         user.setRole(role);
 
-        // Handle account mappings only for CUSTOMER
-        if (role.getName() == RoleType.CUSTOMER
-                && userRequest.getAccountIds() != null) {
+        List<UserAccount> accounts = user.getUserAccounts();
 
-            Set<Long> existingAccountIds = userAccountRepository.findAllByUser_Id(id)
-                    .stream()
-                    .map(ua -> ua.getAccount().getId())
-                    .collect(Collectors.toSet());
+        if (role.getName() != RoleType.CUSTOMER) {
+            accounts.clear();
+            return Transformer.userToUserResponse(user);
+        }
 
-            Set<Long> newAccountIds = Set.copyOf(userRequest.getAccountIds());
+        Set<Long> existingIds = accounts.stream()
+                .map(ua -> ua.getAccount().getId())
+                .collect(Collectors.toSet());
 
-            Set<Long> idsToRemove = existingAccountIds.stream()
-                    .filter(oldId -> !newAccountIds.contains(oldId))
-                    .collect(Collectors.toSet());
+        Set<Long> newIds = request.getAccountIds() == null
+                ? Set.of()
+                : new HashSet<>(request.getAccountIds());
 
-            Set<Long> idsToAdd = newAccountIds.stream()
-                    .filter(newId -> !existingAccountIds.contains(newId))
-                    .collect(Collectors.toSet());
+        accounts.removeIf(ua ->
+                !newIds.contains(ua.getAccount().getId())
+        );
 
-            if (!idsToRemove.isEmpty()) {
-                userAccountRepository.deleteAllByUser_IdAndAccount_IdIn(id, idsToRemove);
-            }
+        for (Long accId : newIds) {
+            if (!existingIds.contains(accId)) {
+                Account acc = accountRepository.findById(accId)
+                        .orElseThrow();
 
-            if (!idsToAdd.isEmpty()) {
-                List<UserAccount> toAdd = idsToAdd.stream()
-                        .map(accountId -> UserAccount.builder()
+                accounts.add(
+                        UserAccount.builder()
                                 .user(user)
-                                .account(
-                                        accountRepository.findById(accountId)
-                                                .orElseThrow(() ->
-                                                        new NoSuchElementException("Account not found with id: " + accountId)
-                                                )
-                                )
-                                .build())
-                        .toList();
-
-                userAccountRepository.saveAll(toAdd);
+                                .account(acc)
+                                .build()
+                );
             }
         }
 
         return Transformer.userToUserResponse(user);
-    }
 
+    }
 
 }

@@ -48,7 +48,7 @@ const CreateUser = () => {
   }, []);
 
   useEffect(() => {
-    console.log(data)
+    // console.log(data)
     if (data) {
       setAccounts(data);
     }
@@ -63,7 +63,7 @@ const CreateUser = () => {
         ? prev.filter((id) => id !== accountId)
         : [...prev, accountId]
     );
-    console.log(selectedAccounts);
+    // console.log(selectedAccounts);
   };
 
   //---------------------------UI-------------------//

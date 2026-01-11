@@ -15,7 +15,7 @@ export default function useEditUser(){
                 const response = await api.put(`/user/${userId}`, body);
                 if(response){
                 setData(response.data)
-                toast.success(`User with id ${userId} updated`);
+                toast.success(`User ${body.firstName} updated`);
                 }
             }catch(e){
                 setError(e);

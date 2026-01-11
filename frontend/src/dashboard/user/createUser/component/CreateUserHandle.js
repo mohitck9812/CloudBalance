@@ -26,11 +26,11 @@ export async function handleCreateUserSubmit(e, createUserFn, navigate, selected
     password: form.password.value,
     accountIds: accountIds,
   };
-  console.log(newUser);
+  // console.log(newUser);
 
 
   try {
-    console.log(newUser);
+    // console.log(newUser);
     await createUserFn(newUser);
     navigate("/dashboard/user");
   } catch (err) {

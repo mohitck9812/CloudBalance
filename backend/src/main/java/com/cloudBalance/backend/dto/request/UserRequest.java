@@ -1,6 +1,5 @@
 package com.cloudBalance.backend.dto.request;
 
-import com.cloudBalance.backend.entity.Account;
 import jakarta.validation.constraints.*;
 import lombok.*;
 
@@ -15,7 +14,6 @@ public class UserRequest {
     @NotNull(message = "Role id is required")
     private Long roleId;
 
-    @NotNull(message = "Password field is required")
     private String password;
 
     @NotBlank(message = "First name is required")

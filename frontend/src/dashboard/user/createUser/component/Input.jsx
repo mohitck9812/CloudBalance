@@ -89,7 +89,7 @@ export function AccountListToAdd({
   toggleAccount,
   loading
 }) {
-  console.log(selectedAccounts)
+  // console.log(selectedAccounts)
   if(loading)(<>
     <Loading />
   </>)

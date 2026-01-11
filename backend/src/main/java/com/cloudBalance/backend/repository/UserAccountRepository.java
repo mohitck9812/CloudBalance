@@ -13,6 +13,7 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, Long> 
     List<UserAccount> findAllByUser_Id(Long userId);
 
     void deleteAllByUser_IdAndAccount_IdIn(Long id, Set<Long> idsToRemove);
-//    void deleteByAccountIds(Set<Long> idsToRemove);
+
+    void deleteAllByUser_Id(Long id);
 }
 

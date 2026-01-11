@@ -16,5 +16,5 @@ public class UserResponse {
     private RoleResponse role;
     private boolean isActive;
     private LocalDateTime lastLogin;
-    private List<AccountResponse> accounts;
+    private List<UserAccountResponse> accounts;
 }
