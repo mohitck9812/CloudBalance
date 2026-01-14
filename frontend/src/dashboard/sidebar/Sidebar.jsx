@@ -4,7 +4,6 @@ import MenuList from "./MenuList";
 import { useSelector } from "react-redux";
 
 const Sidebar = ({ menu }) => {
-  // const { user } = useContext(authData);
   const user = useSelector((state) => state.auth.user);
   const role = user?.role?.roleName;
 

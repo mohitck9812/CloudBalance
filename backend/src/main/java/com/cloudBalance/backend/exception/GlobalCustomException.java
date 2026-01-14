@@ -1,6 +1,7 @@
 package com.cloudBalance.backend.exception;
 
 import com.cloudBalance.backend.utils.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -9,7 +10,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
+@Slf4j
 @RestControllerAdvice
 public class GlobalCustomException {
 
@@ -40,6 +41,7 @@ public class GlobalCustomException {
                 .status(HttpStatus.FORBIDDEN)
                 .body(response);
     }
+
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<String>> methodArgumentNotValidException(

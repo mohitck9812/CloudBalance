@@ -2,7 +2,7 @@ import clsx from "clsx";
 import Roles from "./component/Roles";
 import editIcon from "./component/EditIcon.svg";
 import { NavLink, useNavigate } from "react-router-dom";
-import Trash from "../../assets/trash.svg"
+import Trash from "../../assets/trash.svg";
 // import { useContext, useEffect } from "react";
 // import { dummyData } from "../../context/AuthContext";
 import useFetchAllUser from "../../api/user/useFetchAllUser";
@@ -11,54 +11,54 @@ import Loading from "../../component/loading/Loading";
 import { handleDeleteUser } from "./deleteUser/DeleteUser";
 import useDelete from "../../api/user/useDelete";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
 
 const UserTable = () => {
   const navigate = useNavigate();
   // const {userData:data, setUserData:setData} = useContext(dummyData)
-  const {data:dataList, loading, error, fetchAllUser} = useFetchAllUser();
-  const {deleteUser} = useDelete();
+  const user = useSelector((state) => state.auth.user);
+  const { data: dataList, loading, error, fetchAllUser } = useFetchAllUser();
+  const { deleteUser } = useDelete();
   const [data, setData] = useState([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchAllUser();
-  },[])
+  }, []);
 
   useEffect(() => {
-  if (Array.isArray(dataList.data)) {
-    setData(dataList?.data);
-  } else {
-    setData([]); 
-  }
-}, [dataList]);
+    if (Array.isArray(dataList.data)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setData(dataList?.data);
+    } else {
+      setData([]);
+    }
+  }, [dataList]);
 
+  const isEditDisabled = (value) => value.id === user.id || user.role.id === 2;
 
-  function handleEdit(value){
+  function handleEdit(value) {
     // console.log(value);
     navigate(`/dashboard/user/edit/${value.id}`);
   }
 
-  function handleErrorInAPi(){
+  function handleErrorInAPi() {
     navigate("/dashboard");
-    toast.error("Retry in a while")
+    toast.error("Retry in a while");
   }
 
-  if(loading){
-    return(
+  if (loading) {
+    return (
       <>
         {/* <div className="w-full max-h-[67vh]">
           <p className="text-7xl">Loading...</p>
         </div> */}
-        <Loading/>
+        <Loading />
       </>
-    )
+    );
   }
 
-  if(error){
-    return(
-      <>
-        {handleErrorInAPi}
-      </>
-    )
+  if (error) {
+    return <>{handleErrorInAPi}</>;
   }
 
   return (
@@ -108,22 +108,38 @@ const UserTable = () => {
                     <Roles roles={value?.role?.roleName} />
                   </div>
                 </td>
-                <td className={clsx("p-2")}>{!value.lastLogin ? "--" : value.lastLogin} </td>
+                <td className={clsx("p-2")}>
+                  {!value.lastLogin ? "--" : value.lastLogin}{" "}
+                </td>
                 <td className={clsx("p-2")}>
                   <div className="flex gap-3">
-                  {/* edit Button */}
-                  <button className="hover:cursor-pointer"
-                  onClick={() => {handleEdit(value)}}>
-                    {" "}
-                    <img src={editIcon} />{" "}
-                  </button>{" "}
-                  {/* Delete button */}
-                  <button className="hover:cursor-pointer" 
-                  onClick={() => {
-                    handleDeleteUser(value, deleteUser, setData); 
-                  }}>
-                    <img src={Trash} />{" "}
-                  </button>
+                    {/* edit Button */}
+                    <button
+                      className={clsx(
+                        "hover:cursor-pointer",
+                        isEditDisabled(value) && "opacity-40 cursor-not-allowed"
+                      )}
+                      onClick={() => {
+                        handleEdit(value);
+                      }}
+                      // disabled={(value) => isEditDisabled(value)}
+                    >
+                      {" "}
+                      <img src={editIcon} />{" "}
+                    </button>{" "}
+                    {/* Delete button */}
+                    <button
+                      className={clsx(
+                        "hover:cursor-pointer",
+                        isEditDisabled(value) && "opacity-40 cursor-not-allowed"
+                      )}
+                      onClick={() => {
+                        handleDeleteUser(value, deleteUser, setData);
+                      }}
+                      // disabled={(value) => isEditDisabled(value)}
+                    >
+                      <img src={Trash} />{" "}
+                    </button>
                   </div>
                 </td>
               </tr>

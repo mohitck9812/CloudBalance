@@ -12,7 +12,7 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQLDialect
-
+    database-platform: org.hibernate.dialect.MySQLDialect
 
 logging:
   level:
@@ -35,12 +35,12 @@ jwt:
   secretKey: avjfahsiuv90g0248q84h39nv3rejfqj09waeur09q348fq93hrfqaijdps09qu9408qv3naeoufvjsfj0q843h9hre9afspijarwe
 
 snowflake:
-  enabled: true
-  url: jdbc:snowflake://mnefzjg-cn39210.snowflakecomputing.com
-  username: mohitck9812
-  password: MohitYadav@9812
-  warehouse: COST_WH
-  database: COST_DB
-  schema: PUBLIC
-
-
+  datasource:
+#    url: jdbc:snowflake://mnefzjg-cn39210.snowflakecomputing.com
+#    username: mohitck9812
+#    password: MohitYadav@9812
+#    driver-class-name: net.snowflake.client.jdbc.SnowflakeDriver
+    url: jdbc:snowflake://jgwazim-wu66490.snowflakecomputing.com/?warehouse=SNOWFLAKE_LEARNING_WH&db=SNOWFLAKE_LEARNING_DB&schema=AWS_CUR&role=COST_DB_READONLY&use_arrow_result=false
+    username: cost_read_user
+    password: aws_cost_report_read_only
+    driver-class-name: net.snowflake.client.jdbc.SnowflakeDriver

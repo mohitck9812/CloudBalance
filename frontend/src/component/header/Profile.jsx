@@ -10,12 +10,12 @@ const Profile = () => {
   // const { user, setUser } = useContext(authData);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state.auth.user);
   const handleLogOut = () => {
-    //to add logout api 
-  dispatch(logout());
-  navigate("/", { replace: true });
-};
+    //to add logout api
+    dispatch(logout());
+    navigate("/", { replace: true });
+  };
 
   return (
     <div className="flex h-full justify-center items-center gap-2">

@@ -1,11 +1,40 @@
-import React from 'react'
 
-const CostExplorer = () => {
+// import CostExplorerContainer from "./components/CostExplorerContainer";
+
+// export default function CostExplorer() {
+
+//   return (
+//     <div className="min-h-screen bg-gray-50 flex flex-col p-8">
+//       <div className="flex-1 w-full">
+//         <CostExplorerContainer />
+//       </div>
+//     </div>
+//   );
+// }
+
+
+// import Header from "../../Components/Header";
+// import Sidebar from "../../Components/Sidebar";
+// import Footer from "../../Components/Footer";
+import CostExplorerContainer from "./components/CostExplorerContainer";
+
+export default function CostExplorer() {
+
   return (
-    <div>
-      
-    </div>
-  )
-}
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* <Header /> */}
 
-export default CostExplorer
+      <main className="flex-1 px-6 py-6 flex">
+        <div className="flex gap-6 w-full">
+          {/* <Sidebar selected="users" /> */}
+
+          <div className="flex-1 max-w-[calc(100vw-330px)]">
+            <CostExplorerContainer />
+          </div>
+        </div>
+      </main>
+
+      {/* <Footer /> */}
+    </div>
+  );
+}
