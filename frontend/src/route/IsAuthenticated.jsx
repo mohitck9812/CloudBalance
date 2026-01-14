@@ -6,11 +6,12 @@ const IsAuthenticated = ({ children }) => {
     (state) => state.auth
   );
 
-  if (loading) return null;
+  if (loading) return ;
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
+
 
   return children;
 };

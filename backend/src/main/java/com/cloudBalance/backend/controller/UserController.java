@@ -36,7 +36,6 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ApiResponse<UserResponse> getUserById(@PathVariable Long id){
-//        System.out.println(userService.getClass());
             UserResponse userResponse = userService.getUserById(id);
             return new ApiResponse<>(HttpStatus.OK, "User detail of user id: " + id, userResponse);
     }

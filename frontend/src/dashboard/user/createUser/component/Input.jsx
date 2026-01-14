@@ -12,6 +12,7 @@ export default function Input({
   error,
   readOnly = false,
 }) {
+
   return (
     <div>
       <div className="flex flex-col w-full">
@@ -26,7 +27,7 @@ export default function Input({
           readOnly={readOnly}
           className={clsx(
             "mt-1 w-100 border rounded pl-4 py-3 border-black/10 placeholder:text-black/30 focus:outline-primary/70",
-            error && "border-red-600",
+            error && "border-red-600 focus:border-red-600 active:border-red-600 focus:outline-red-600",
             readOnly && "bg-gray-100 cursor-not-allowed text-gray-600"
           )}
         />

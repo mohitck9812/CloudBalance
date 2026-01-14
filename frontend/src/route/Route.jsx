@@ -42,19 +42,19 @@ const router = createBrowserRouter([
           },
           {
             path: "user",
-            element: <User />,
+            element: <ProtectedRoute allowedRole={[1,3]}><User /></ProtectedRoute>,
           },
           {
             path: "user/create",
-            element: <CreateUser />,
+            element: <ProtectedRoute allowedRole={[1,3]}><CreateUser /></ProtectedRoute>,
           },
           {
             path: "user/edit/:userID",
-            element: <EditUser />,
+            element: <ProtectedRoute allowedRole={[1,3]}><EditUser /></ProtectedRoute>,
           },
           {
             path: "onboarding",
-            element: <Onboarding />,
+            element: <ProtectedRoute allowedRole={[1,3]}><Onboarding /></ProtectedRoute>,
           },
           {
             path: "cost-explorer",

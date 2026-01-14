@@ -25,7 +25,7 @@ const IamRoleCreation = ({account,setAccount}) => {
   return (
     <div id="accountCreation">
       <div className="flex flex-col gap-3">
-        <h1 className="text-2xl font-bold">Create an IAM Role</h1>
+        <h1 className="text-4xl font-bold">Create an IAM Role</h1>
         <h3 className="text-sm">Create an IAM Role by following these steps</h3>
         <div className="border rounded-xl p-7.5 bg-white shadow-2xl flex flex-col gap-5 p">
           {/* point 1 */}
