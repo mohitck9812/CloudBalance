@@ -72,7 +72,7 @@ export default function FilterPanel({ filters, onApply, onReset, onClose }) {
   };
 
   const renderFilter = (key, label) => (
-    <div className="border-b border-gray-200 py-2">
+    <div className="border-b border-gray-200 py-2 transition-all duration-300 ease-in-out">
       <div
         className="flex justify-between cursor-pointer font-medium text-sm text-gray-700"
         onClick={() => setOpen(open === key ? null : key)}

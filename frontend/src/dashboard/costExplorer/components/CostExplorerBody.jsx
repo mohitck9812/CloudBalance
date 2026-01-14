@@ -184,6 +184,7 @@ import FusionCharts from "fusioncharts";
 import Charts from "fusioncharts/fusioncharts.charts";
 import ReactFC from "react-fusioncharts";
 import Loading from "../../../component/loading/Loading";
+import ChartToggle from "./ChartToggle";
 
 ReactFC.fcRoot(FusionCharts, Charts);
 
@@ -196,17 +197,14 @@ export default function CostExplorerBody({
   setFromDate,
   setToDate,
 }) {
+  console.log(data)
   const [chartType, setChartType] = useState("stackedcolumn2d");
 
-  // -------------------------------
-  // 1️⃣ Normalize & validate data
-  // -------------------------------
   const chartData = useMemo(() => {
     if (!Array.isArray(data) || data.length === 0) {
       return { months: [], dataset: [], table: [] };
     }
 
-    // Months (sorted)
     const monthOrder = {
       Jan: 0, Feb: 1, Mar: 2, Apr: 3, May: 4, Jun: 5,
       Jul: 6, Aug: 7, Sep: 8, Oct: 9, Nov: 10, Dec: 11,
@@ -222,9 +220,6 @@ export default function CostExplorerBody({
     const months = [...new Set(data.map(d => d.month))].sort(sortMonths);
     const groups = [...new Set(data.map(d => d.service))];
 
-    // -------------------------------
-    // 2️⃣ Build sparse matrix (NO 0s)
-    // -------------------------------
     const matrix = {};
     groups.forEach(g => {
       matrix[g] = {};
@@ -234,9 +229,6 @@ export default function CostExplorerBody({
       matrix[d.service][d.month] = d.cost;
     });
 
-    // -------------------------------
-    // 3️⃣ FusionCharts dataset
-    // -------------------------------
     const dataset = groups.map(g => ({
       seriesname: g,
       data: months.map(m =>
@@ -244,9 +236,6 @@ export default function CostExplorerBody({
       ),
     }));
 
-    // -------------------------------
-    // 4️⃣ Table data
-    // -------------------------------
     const table = groups.map(g => {
       const values = months.map(m => matrix[g][m] ?? null);
       return {
@@ -259,9 +248,6 @@ export default function CostExplorerBody({
     return { months, dataset, table };
   }, [data]);
 
-  // -------------------------------
-  // 5️⃣ Chart config
-  // -------------------------------
   const chartConfig = {
     type: chartType,
     width: "100%",
@@ -288,19 +274,6 @@ export default function CostExplorerBody({
     },
   };
 
-  const iconBtn = (type, label) => (
-    <button
-      onClick={() => setChartType(type)}
-      className={`px-3 py-1 border rounded text-sm ${
-        chartType === type
-          ? "bg-blue-100 border-blue-500 text-blue-600"
-          : "bg-white border-gray-300 text-gray-500 hover:bg-gray-100"
-      }`}
-    >
-      {label}
-    </button>
-  );
-
   if (loading) return <Loading />;
 
   return (
@@ -313,11 +286,7 @@ export default function CostExplorerBody({
           <input type="date" value={toDate} onChange={e => setToDate(e.target.value)} />
         </div>
 
-        <div className="flex gap-2">
-          {iconBtn("stackedcolumn2d", "Stacked")}
-          {iconBtn("mscolumn2d", "Column")}
-          {iconBtn("msline", "Line")}
-        </div>
+        <ChartToggle chartType={chartType} setChartType={setChartType}/>
       </div>
 
       {/* CHART */}

@@ -6,10 +6,7 @@ public enum RoleType {
     CUSTOMER(2L),
     READ_ONLY(3L);
 
-
-
     private final Long id;
-
 
     RoleType(Long id) { this.id = id; }
 

@@ -15,15 +15,14 @@ export default function ChartToggle({ chartType, setChartType }) {
 
   return (
     <div className="flex gap-2">
-      {btn("bar", barIcon)}
-      {btn("line", lineIcon)}
-      {btn("stacked", stackedIcon)}
+      {btn("mscolumn2d", barIcon)}
+      {btn("msline", lineIcon)}
+      {btn("stackedcolumn2d", stackedIcon)}
     </div>
   );
 }
 
 /* ICONS */
-
 const barIcon = (
   <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
     <rect x="3" y="10" width="4" height="10"/>

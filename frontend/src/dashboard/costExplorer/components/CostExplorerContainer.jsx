@@ -24,7 +24,9 @@ export default function CostExplorerContainer() {
     params.append("to", toDate);
 
     Object.entries(filters || {}).forEach(([key, values]) => {
-      values.forEach((v) => params.append(key, v));
+      if (Array.isArray(values) && values.length > 0) {
+        params.append(key, values.join(","));
+      }
     });
 
     fetchChartData(params);

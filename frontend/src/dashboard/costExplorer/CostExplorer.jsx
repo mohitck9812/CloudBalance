@@ -1,40 +1,13 @@
-
-// import CostExplorerContainer from "./components/CostExplorerContainer";
-
-// export default function CostExplorer() {
-
-//   return (
-//     <div className="min-h-screen bg-gray-50 flex flex-col p-8">
-//       <div className="flex-1 w-full">
-//         <CostExplorerContainer />
-//       </div>
-//     </div>
-//   );
-// }
-
-
-// import Header from "../../Components/Header";
-// import Sidebar from "../../Components/Sidebar";
-// import Footer from "../../Components/Footer";
 import CostExplorerContainer from "./components/CostExplorerContainer";
 
 export default function CostExplorer() {
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      {/* <Header /> */}
-
-      <main className="flex-1 px-6 py-6 flex">
-        <div className="flex gap-6 w-full">
-          {/* <Sidebar selected="users" /> */}
-
-          <div className="flex-1 max-w-[calc(100vw-330px)]">
-            <CostExplorerContainer />
-          </div>
+    <div className="min-h-[calc(100vh-120px)] bg-gray-50 flex flex-col overflow-y-scroll">
+      <main className="p-6 pb-20 gap-6 w-full flex ">
+        <div className="flex-1 max-w-[calc(100vw-330px)]">
+          <CostExplorerContainer />
         </div>
       </main>
-
-      {/* <Footer /> */}
     </div>
   );
 }
